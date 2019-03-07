@@ -13,6 +13,9 @@
     "http-errors": "~1.6.2",
     "mongoose": "^5.4.17",
     "morgan": "~1.9.0",
-    "natural": "^0.6.3"
+    "natural": "^0.6.3",
+    "remove-stopwords": "^1.0.3",
+    "stopword": "^0.1.13",
+    "wordnet-db": "^3.1.11"
   }
 }

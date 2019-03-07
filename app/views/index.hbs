@@ -1,80 +1,137 @@
-<div class="myForm">
+<div class="main">
     <div class="row">
-        <div class="col-8">
-            <div class="stemmer">
-                <form action="/stemmer" method="POST">
-                    <div class="row">
-                        <div class="col-9">
-                            <input name="string" class="form-control" type="text" placeholder="value" />
-                        </div>
-                        <div class="col-3">
-                            <button class="form-control btn btn-success">Stemmer</button>
-                        </div>
+        <div class="col-3 col-lg-3 col-sm-3 col-xs-3">
+            <div class="row userTitle">
+                Train your bot
+            </div>
+            <hr>
+            <div class="container">
+                <form action="/addClassifiedData" method="POST">
+                    <div class="md-form active-cyan-2 mb-3">
+                        <input name="entity" class="form-control" type="text" placeholder="Type your Intent"
+                            aria-label="entity" required>
                     </div>
+                    <div class="md-form active-cyan-2 mb-3">
+                        <input name="expression" class="form-control" type="text" placeholder="Type your expression"
+                            aria-label="expression" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Add</button>
                 </form>
             </div>
-            <br>
-            <div class="stringdistance">
-                <form action="/stringdistance" method="POST">
-                    <div class="row">
-                        <div class="col-9">
-                            <input name="stringdistance1" class="form-control" type="text" placeholder="text 1" />
-                            <br>
-                            <input name="stringdistance2" class="form-control" type="text" placeholder="text 2" />
-                        </div>
-                        <div class="col-3">
-                            <button class="form-control btn btn-success">String Distance</button>
-                        </div>
+            {{!-- <br><br>
+            <hr>
+            <br><br>
+            <div class="container">
+                <a href="/train" class="btn btn-primary btn-block">Train Now</a>
+            </div> --}}
+            <br><br>
+            <hr>
+            <br><br>
+            <div class="container">
+                {{#each classified.classification}}
+                <div>
+                    classified as: <h1>{{this.label}}: {{this.value}}</h1>
+                </div>
+                {{/each}}
+                <form action="/getClassifiedData" method="POST">
+                    <div class="md-form active-cyan-2 mb-3">
+                        <input name="expression" class="form-control" type="text" placeholder="Type your expression"
+                            aria-label="expression" required>
                     </div>
-                </form>
-            </div>
-            <br>
-            <div class="tokenize">
-                <form action="/tokenize" method="POST">
-                    <div class="row">
-                        <div class="col-9">
-                            <input name="string" class="form-control" type="text" placeholder="String" />
-                        </div>
-                        <div class="col-3">
-                            <button class="form-control btn btn-success">Tokenize</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <br>
-            <div class="classifier">
-                <form action="/classifier" method="POST">
-                    <div class="row">
-                        <div class="col-9">
-                            <input name="string" class="form-control" type="text" placeholder="String" />
-                        </div>
-                        <div class="col-3">
-                            <button class="form-control btn btn-success">Classify</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <br>
-            <div class="sentiments">
-                <form action="/sentiments" method="POST">
-                    <div class="row">
-                        <div class="col-9">
-                            <input name="string" class="form-control" type="text" placeholder="String" />
-                        </div>
-                        <div class="col-3">
-                            <button class="form-control btn btn-success">Sentiments</button>
-                        </div>
-                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Get</button>
                 </form>
             </div>
         </div>
-        <div class="col-4">
-            <div class="result">
-                <div class="card">
-                    <div class="card-body">
-                        <p>{{result}}</p>
+        {{!-- <span class="border-right"></span> --}}
+        {{!-- <div class="col-6">
+            <form action="">
+                <div class="row">
+                    <div class="col-9">
+                        <div class="md-form active-cyan-2 mb-3">
+                            <input class="form-control" type="text" placeholder="Name your intent" aria-label="intent">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <button type="submit" class="btn btn-info">Save</button>
                     </div>
                 </div>
+            </form>
+        </div> --}}
+        {{!-- <span class="border-right"></span> --}}
+        <div class="col-9 col-lg-9 col-sm-9 col-xs-9">
+            <div class="container">
+                <form action="/checkcontents" method="POST" class="search">
+                    <div class="md-form active-cyan-2 mb-3">
+                        <input name="expression" class="form-control" type="text" placeholder="Type your expression"
+                            aria-label="expression">
+                    </div>
+                </form>
+                <br>
+            </div>
+            <div class="container-fluid wrapper">
+                {{#if result}}
+                <h2>{{result.expression}}</h2>
+                <table class="table table-striped">
+                    {{!-- <tr>
+                            <td><strong>Porter stemming</strong></td>
+                            <td>{{result.stemming.PorterStemmer}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lancaster stemming</strong></td>
+                            <td>{{result.stemming.LancasterStemmer}}</td>
+                        </tr> --}}
+                    <tr>
+                        <td><strong>Keyword</strong></td>
+                        <td>
+                            {{#each result.keywords}}
+                            {{this}},
+                            {{/each}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sentiments</strong></td>
+                        <td>
+                            {{result.sentiment}}
+                        </td>
+                    </tr>
+                </table>
+                <br><br>
+                <h2>User expression data</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">POS</th>
+                            <th scope="col">Definition</th>
+                            <th scope="col">Gloss</th>
+                            <th scope="col">Lemmate</th>
+                            <th scope="col">Synonyms</th>
+                            <th scope="col">Word Count</th>
+                            <th scope="col">Expression</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each result.results}}
+                        <tr>
+                            <td>{{this.pos}}</td>
+                            <td>{{this.def}}</td>
+                            <td class="wrap">{{this.gloss}}</td>
+                            <td>{{this.lemma}}</td>
+                            <td>
+                                {{#each this.synonyms}}
+                                {{this}},
+                                {{/each}}
+                            </td>
+                            <td>{{this.wCnt}}</td>
+                            <td class="wrap">
+                                {{#each this.exp}}
+                                {{this}},
+                                {{/each}}
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                {{/if}}
             </div>
         </div>
     </div>
