@@ -24,22 +24,25 @@
             <div class="container">
                 <a href="/train" class="btn btn-primary btn-block">Train Now</a>
             </div> --}}
-            <br><br>
-            <hr>
-            <br><br>
+            <br><hr><br>
             <div class="container">
-                {{#each classified.classification}}
-                <div>
-                    classified as: <h1>{{this.label}}: {{this.value}}</h1>
+                <div class="container">
+                    <form action="/getClassifiedData" method="POST">
+                        <div class="md-form active-cyan-2 mb-3">
+                            <input name="expression" class="form-control" type="text" placeholder="Type your expression"
+                                aria-label="expression" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Get</button>
+                    </form>
                 </div>
-                {{/each}}
-                <form action="/getClassifiedData" method="POST">
-                    <div class="md-form active-cyan-2 mb-3">
-                        <input name="expression" class="form-control" type="text" placeholder="Type your expression"
-                            aria-label="expression" required>
+                <hr>
+                <div class="container dataWrapper">
+                    {{#each classified.classification}}
+                    <div>
+                        classified as: <h2>{{this.label}}: {{this.value}}</h2>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Get</button>
-                </form>
+                    {{/each}}
+                </div>
             </div>
         </div>
         {{!-- <span class="border-right"></span> --}}
@@ -72,14 +75,6 @@
                 {{#if result}}
                 <h2>{{result.expression}}</h2>
                 <table class="table table-striped">
-                    {{!-- <tr>
-                            <td><strong>Porter stemming</strong></td>
-                            <td>{{result.stemming.PorterStemmer}}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Lancaster stemming</strong></td>
-                            <td>{{result.stemming.LancasterStemmer}}</td>
-                        </tr> --}}
                     <tr>
                         <td><strong>Keyword</strong></td>
                         <td>

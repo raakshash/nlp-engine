@@ -27,6 +27,13 @@ body {
   height: 80vh;
 }
 
+.dataWrapper{
+  width: 100%;
+  overflow-y: scroll;
+  position: relative;
+  height: 40vh;
+}
+
 .col-3{
   background: #e4e4e4;
   height: 100vh;
