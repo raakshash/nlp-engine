@@ -1,0 +1,19 @@
+.button-box {
+  position: absolute;
+  width: 100%;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  /* remove scrollbar space */
+  background: transparent;
+  /* optional: just make scrollbar invisible */
+}
+
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: rgb(207, 207, 207);
+}

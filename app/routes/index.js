@@ -1,19 +1,58 @@
 var express = require('express');
 var router = express.Router();
+const passport = require('passport');
 
 var nlp = require('../nltk/natural.js');
 
 var result = null;
 var classifiedValue = null;
+var isSignupModeActive = false;
+
+var isLoggedIn = function (req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+  res.status(400).redirect('/');
+}
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', {
     title: 'Numenedict',
+    isSignupActive: isSignupModeActive
+  });
+});
+
+router.get('/create-model', isLoggedIn, function (req, res) {
+  res.render('main', { 
+    title: 'Numenedict',
     result: result,
     classified: classifiedValue
   });
   classifiedValue = null;
+});
+
+router.get('/login', function(req, res, next){
+  isSignupModeActive = false;
+  res.redirect('/');
+});
+router.get('/signup', function(req, res, next){
+  isSignupModeActive = true;
+  res.redirect('/');
+});
+
+router.post('/login', passport.authenticate('local-login', {
+  successRedirect: '/create-model',
+  failureRedirect: '/'
+}));
+
+router.post('/signup', passport.authenticate('local-signup', {
+  successRedirect: '/create-model',
+  failureRedirect: '/'
+}));
+
+router.get('/logout', isLoggedIn, (req, res) => {
+  req.logout();
+  res.status(200).redirect('/');
 });
 
 router.post('/checkcontents', function (req, res, next) {

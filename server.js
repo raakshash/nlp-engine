@@ -5,9 +5,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var debug = require('debug')('nlp-engine:server');
 var http = require('http');
+const passport = require('passport');
+var session = require('express-session');
+require("./app/config/database.js").init();
+require('./app/config/passport.js').init(passport);
 
-var indexRouter = require('./app/routes/index');
-var usersRouter = require('./app/routes/users');
+// var indexRouter = require('./app/routes/index');
+var apiRouter = require('./app/routes/api');
 
 var app = express();
 
@@ -21,8 +25,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// required for passport
+app.use(session({
+  secret: 'raakshash', // session secret
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+// app.use('/', indexRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

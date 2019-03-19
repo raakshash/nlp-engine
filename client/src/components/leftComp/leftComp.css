@@ -1,0 +1,15 @@
+.col-3 {
+    background: #e4e4e4;
+    height: 100vh;
+}
+
+.userTitle {
+    height: 10vh;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-bar {
+    bottom: 10px;
+}

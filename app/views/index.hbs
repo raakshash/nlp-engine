@@ -1,133 +1,33 @@
-<div class="main">
-    <div class="row">
-        <div class="col-3 col-lg-3 col-sm-3 col-xs-3">
-            <div class="row userTitle">
-                Train your bot
-            </div>
-            <hr>
-            <div class="container">
-                <form action="/addClassifiedData" method="POST">
-                    <div class="md-form active-cyan-2 mb-3">
-                        <input name="entity" class="form-control" type="text" placeholder="Type your Intent"
-                            aria-label="entity" required>
-                    </div>
-                    <div class="md-form active-cyan-2 mb-3">
-                        <input name="expression" class="form-control" type="text" placeholder="Type your expression"
-                            aria-label="expression" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Add</button>
-                </form>
-            </div>
-            {{!-- <br><br>
-            <hr>
-            <br><br>
-            <div class="container">
-                <a href="/train" class="btn btn-primary btn-block">Train Now</a>
-            </div> --}}
-            <br><hr><br>
-            <div class="container">
-                <div class="container">
-                    <form action="/getClassifiedData" method="POST">
-                        <div class="md-form active-cyan-2 mb-3">
-                            <input name="expression" class="form-control" type="text" placeholder="Type your expression"
-                                aria-label="expression" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Get</button>
-                    </form>
-                </div>
-                <hr>
-                <div class="container dataWrapper">
-                    {{#each classified.classification}}
-                    <div>
-                        classified as: <h2>{{this.label}}: {{this.value}}</h2>
-                    </div>
-                    {{/each}}
-                </div>
-            </div>
-        </div>
-        {{!-- <span class="border-right"></span> --}}
-        {{!-- <div class="col-6">
-            <form action="">
-                <div class="row">
-                    <div class="col-9">
-                        <div class="md-form active-cyan-2 mb-3">
-                            <input class="form-control" type="text" placeholder="Name your intent" aria-label="intent">
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <button type="submit" class="btn btn-info">Save</button>
-                    </div>
-                </div>
-            </form>
-        </div> --}}
-        {{!-- <span class="border-right"></span> --}}
-        <div class="col-9 col-lg-9 col-sm-9 col-xs-9">
-            <div class="container">
-                <form action="/checkcontents" method="POST" class="search">
-                    <div class="md-form active-cyan-2 mb-3">
-                        <input name="expression" class="form-control" type="text" placeholder="Type your expression"
-                            aria-label="expression">
-                    </div>
-                </form>
+<div class="card">
+    <div class="card-body">
+        {{!-- {{#if isSignupActive}}
+        <div class="signup">
+            <form action="/signup" method="POST" class="signup">
+                <input name="username" class="form-control" type="username" placeholder="username" />
                 <br>
-            </div>
-            <div class="container-fluid wrapper">
-                {{#if result}}
-                <h2>{{result.expression}}</h2>
-                <table class="table table-striped">
-                    <tr>
-                        <td><strong>Keyword</strong></td>
-                        <td>
-                            {{#each result.keywords}}
-                            {{this}},
-                            {{/each}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Sentiments</strong></td>
-                        <td>
-                            {{result.sentiment}}
-                        </td>
-                    </tr>
-                </table>
-                <br><br>
-                <h2>User expression data</h2>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">POS</th>
-                            <th scope="col">Definition</th>
-                            <th scope="col">Gloss</th>
-                            <th scope="col">Lemmate</th>
-                            <th scope="col">Synonyms</th>
-                            <th scope="col">Word Count</th>
-                            <th scope="col">Expression</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each result.results}}
-                        <tr>
-                            <td>{{this.pos}}</td>
-                            <td>{{this.def}}</td>
-                            <td class="wrap">{{this.gloss}}</td>
-                            <td>{{this.lemma}}</td>
-                            <td>
-                                {{#each this.synonyms}}
-                                {{this}},
-                                {{/each}}
-                            </td>
-                            <td>{{this.wCnt}}</td>
-                            <td class="wrap">
-                                {{#each this.exp}}
-                                {{this}},
-                                {{/each}}
-                            </td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-                {{/if}}
-            </div>
+                <input name="password" class="form-control" type="password" placeholder="password" />
+                <br>
+                <button class="form-control btn btn-light-green">Signup</button>
+            </form>
+            <br>
+            <hr>
+            <br>
+            <a class="form-control btn btn-cyan" href="/login">Login</a>
         </div>
+        {{else}} --}}
+        <div class="login">
+            <form action="/login" method="POST">
+                <input name="username" class="form-control" type="username" placeholder="username" />
+                <br>
+                <input name="password" class="form-control" type="password" placeholder="password" />
+                <br>
+                <button class="btn btn-light-green btn-block">Login</button>
+            </form>
+            <br>
+            {{!-- <hr>
+            <br>
+            <a class="form-control btn btn-cyan" href="/signup">Signup</a> --}}
+        </div>
+        {{!-- {{/if}} --}}
     </div>
 </div>

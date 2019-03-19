@@ -46,6 +46,10 @@ body {
   justify-content: center;
 }
 
+#logout-bar{
+  padding-top: 62vh;
+}
+
 
 ::-webkit-scrollbar {
   width: 0px;  /* remove scrollbar space */

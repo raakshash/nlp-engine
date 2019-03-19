@@ -3,19 +3,29 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
+    "bcrypt": "^3.0.4",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "express-session": "^1.15.6",
     "hbs": "~4.0.1",
     "http-errors": "~1.6.2",
     "mongoose": "^5.4.17",
     "morgan": "~1.9.0",
     "natural": "^0.6.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "remove-stopwords": "^1.0.3",
     "stopword": "^0.1.13",
     "wordnet-db": "^3.1.11"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0"
   }
 }

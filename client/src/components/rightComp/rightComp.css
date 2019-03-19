@@ -1,0 +1,6 @@
+.dataWrapper{
+    width: 100%;
+    overflow-y: scroll;
+    position: relative;
+    height: 40vh;
+  }
