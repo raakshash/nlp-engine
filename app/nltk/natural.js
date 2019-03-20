@@ -71,7 +71,7 @@ class NLP {
 
     getClassifiedData(iExpression){
         let classificationData = {};
-        classificationData.classified = this.Classifier.classify(iExpression);
+        // classificationData.classified = this.Classifier.classify(iExpression);
         classificationData.classification = this.Classifier.getClassifications(iExpression);
         return classificationData;
     }

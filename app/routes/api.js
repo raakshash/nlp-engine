@@ -78,20 +78,25 @@ router.post('/getresponse', function (req, res, next) {
     let data = nlp.getClassifiedData(req.body.expression).classification;
     let resToSend = "";
 
-    Intent.findOne({
-        "key": data[0].label
-    }, function (err, iIntent) {
-        if (err) {
-            console.log("No intent found: " + err);
-        } else {
-            let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
-            resToSend = iIntent.responses[replyRandomIndex];
-            if (resToSend == undefined || resToSend == "") {
-                resToSend = "Not trained for this";
+    if(data.length > 0){
+        Intent.findOne({
+            "key": data[0].label
+        }, function (err, iIntent) {
+            if (err) {
+                console.log("No intent found: " + err);
+            } else {
+                let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
+                resToSend = iIntent.responses[replyRandomIndex];
+                if (resToSend == undefined || resToSend == "") {
+                    resToSend = "Not trained for this";
+                }
+                res.json(resToSend);
             }
-            res.json(resToSend)
-        }
-    });
+        });
+    }else{
+        resToSend = "Not trained for this";
+        res.json(resToSend)
+    }
 });
 
 router.post('/addresponse/:_intent', function (req, res, next) {
