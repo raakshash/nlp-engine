@@ -12,20 +12,12 @@ class Response extends Component {
     }
 
     componentWillMount() {
-        this.setState({ intent: this.props.intent })
+        this.setState({ intent: this.props.context.currentIntentSelected, response: "" })
     }
     submitResponseHandler(event) {
         event.preventDefault();
-        let self = this;
-        fetch('/api/addresponse/' + this.props.intent.key, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(self.state)
-        }).then(res => res.json()).then(function (iIntent) {
-            self.setState({ response: '', intent: iIntent });
-        });
+        this.props.context.onResponseAdded(this.state);
+        this.setState({ response: '' });
     }
     setResponseValue(event) {
         event.preventDefault();
@@ -44,7 +36,7 @@ class Response extends Component {
                 </form>
                 <br />
                 <div className="list-group">
-                    {this.state.intent.responses.map((iResponse, index) =>
+                    {this.props.context.currentIntentSelected.responses.map((iResponse, index) =>
                         <li key={index} className="list-group-item">{iResponse}</li>
                     )}
                 </div>

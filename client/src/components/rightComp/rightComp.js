@@ -6,8 +6,6 @@ class RightComp extends Component {
         super();
         this.state = {
             expression: "",
-            userText: "",
-            response: ""
         }
         this.onTestExpressionSubmit = this.onTestExpressionSubmit.bind(this);
         this.setValue = this.setValue.bind(this);
@@ -16,16 +14,8 @@ class RightComp extends Component {
     onTestExpressionSubmit(event) {
         event.preventDefault();
         let self = this;
-        this.state.userText = this.state.expression;
-        fetch('/api/getresponse', {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(this.state)
-        }).then(res => res.json()).then(function (iResponse) {
-            self.setState({ response: iResponse, expression: ''});
-        });
+        this.props.context.onTestExpression(this.state);
+        self.setState({ expression: ''});
     }
     setValue(event) {
         event.preventDefault();
@@ -46,8 +36,8 @@ class RightComp extends Component {
                         </form>
                     </div><br />
                     <div className="container">
-                        <h3>{this.state.userText}</h3>
-                        {this.state.response}
+                        <h3>{this.props.context.responseData.expression}</h3>
+                        {this.props.context.responseData.response}
                     </div>
                 </div>
             </div>

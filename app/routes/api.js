@@ -38,8 +38,8 @@ router.get('/intents', function (req, res, next) {
 
 router.post('/addintent', function (req, res, next) {
     let newIntent = new Intent();
-    newIntent.key = newIntent.makeKey(req.body.intent)
-    newIntent.value = req.body.intent;
+    newIntent.key = newIntent.makeKey(req.body.intentName)
+    newIntent.value = req.body.intentName;
     newIntent.expressions = [];
     newIntent.responses = [];
     newIntent.save(function (err) {

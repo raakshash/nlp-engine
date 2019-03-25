@@ -7,17 +7,14 @@ import Intent from './intents/intent/intent';
 class CenterComp extends Component {
     constructor() {
         super();
-        this.state = {
-            intent: {}
-        }
         this.renderIntents = this.renderIntents.bind(this);
     }
 
     renderIntents() {
-        if (this.props.isIntentActive) {
-            return <Intent intent={this.props.selectedIntent} />
-        } else if (this.props.intents.length > 0) {
-            return <IntentList intentListData={this.props} />
+        if (this.props.context.currentIntentSelected != undefined) {
+            return <Intent context={this.props.context} />
+        } else if (this.props.context.intents.length > 0) {
+            return <IntentList context={this.props.context} />
         } else {
             return <div className="d-flex flex-column justify-content-center align-items-center h-100">
                     <h1>This is Numenedict</h1>

@@ -11,12 +11,10 @@ class LeftComp extends Component {
                 </div>
                 <hr />
                 <div className="button-box">
-                    <button className="list-group-item list-group-item-action list-group-item-secondary" onClick={this.props.updateIntents}><span>Intents</span></button>
+                    <button 
+                    className="list-group-item list-group-item-action list-group-item-secondary"
+                    onClick={this.props.getIntents}><span>Intents</span></button>
                 </div>
-                {/* <div className="button-box logout-bar">
-                    <hr />
-                    <button className="list-group-item list-group-item-action list-group-item-secondary" id="logout"><span>Logout</span></button>
-                </div> */}
             </div>
         );
     }

@@ -1,0 +1,8 @@
+const constants = {
+    GET_INTENTS: "GET_INTENT",
+    GET_RESPONSE: "GET_RESPONSE",
+    SWITCH_INTENT_SELECTION: "SWITCH_INTENT_SELECTION",
+    USER_LOGGED_IN: "USER_LOGGED_IN"
+}
+
+export default constants;

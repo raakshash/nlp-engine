@@ -8,45 +8,35 @@ class Expressions extends Component {
             expression: ""
         }
         this.submitExpressionHandler = this.submitExpressionHandler.bind(this);
-        this.setValue = this.setValue.bind(this);
+        this.setExpressionValue = this.setExpressionValue.bind(this);
     }
 
     componentWillMount() {
-        this.setState({ intent: this.props.intent, expression: "" })
+        this.setState({ intent: this.props.context.currentIntentSelected, expression: "" })
     }
     submitExpressionHandler(event) {
         event.preventDefault();
-        let self = this;
-        fetch('/api/addintent/' + this.props.intent.key, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(self.state)
-        }).then(res => res.json()).then(function (iIntent) {
-            self.setState({ expression: '', intent: iIntent });
-        });
+        this.props.context.onExpressionAdded(this.state);
+        this.setState({ expression: '' });
     }
-    setValue(event) {
+    setExpressionValue(event) {
         event.preventDefault();
         this.setState({ expression: event.target.value })
     }
     render() {
         return (
             <div className="container">
-                <div className="container">
-                    <form onSubmit={this.submitExpressionHandler}>
-                        <div className="md-form active-cyan-2 mb-3">
-                            <input
-                                value={this.state.expression}
-                                onChange={this.setValue}
-                                name="intent" className="form-control" type="text" placeholder="Type your expression" required />
-                        </div>
-                    </form>
-                    <br />
-                </div>
+                <form onSubmit={this.submitExpressionHandler}>
+                    <div className="md-form active-cyan-2 mb-3">
+                        <input
+                            value={this.state.expression}
+                            onChange={this.setExpressionValue}
+                            name="intent" className="form-control" type="text" placeholder="Type your expression" required />
+                    </div>
+                </form>
+                <br />
                 <div className="list-group">
-                    {this.state.intent.expressions.map((iExpression, index) =>
+                    {this.props.context.currentIntentSelected.expressions.map((iExpression, index) =>
                         <li key={index} className="list-group-item">{iExpression}</li>
                     )}
                 </div>

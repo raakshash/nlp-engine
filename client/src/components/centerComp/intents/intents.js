@@ -4,30 +4,19 @@ class IntentList extends Component {
     constructor() {
         super();
         this.state = {
-            intent: "",
-            isIntentActive: false,
+            intentName: ""
         }
         this.submitHandler = this.submitHandler.bind(this);
         this.setValue = this.setValue.bind(this);
     }
     submitHandler(event) {
         event.preventDefault();
-        let self = this;
-        fetch('/api/addintent', {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(self.state)
-        }).then(function () {
-            self.props.intentListData.update();
-        }).then(function () {
-            self.setState({ intent: '' });
-        });
+        this.props.context.onIntentAdded(this.state);
+        this.setState({ intentName: '' });
     }
     setValue(event) {
         event.preventDefault();
-        this.setState({ intent: event.target.value })
+        this.setState({ intentName: event.target.value })
     }
     render() {
 
@@ -37,7 +26,7 @@ class IntentList extends Component {
                     <form onSubmit={this.submitHandler}>
                         <div className="md-form active-cyan-2 mb-3">
                             <input
-                                value={this.state.intent}
+                                value={this.state.intentName}
                                 onChange={this.setValue}
                                 name="intent" className="form-control" type="text" placeholder="Type your intent" required />
                         </div>
@@ -46,8 +35,12 @@ class IntentList extends Component {
                 </div>
                 <div className="container-fluid wrapper">
                     <div className="list-group">
-                        {this.props.intentListData.intents.map(iIntent =>
-                            <button key={iIntent.key} onClick={this.props.intentListData.switchIntentData.bind(this, iIntent)} className="list-group-item list-group-item-action list-group-item-secondary">{iIntent.value}</button>
+                        {this.props.context.intents.map(iIntent =>
+                            <button 
+                            key={iIntent.key} 
+                            onClick={this.props.context.switchIntentSelection.bind(this, iIntent)} 
+                            className="list-group-item list-group-item-action list-group-item-secondary">
+                            {iIntent.value}</button>
                         )}
                     </div>
                 </div>
