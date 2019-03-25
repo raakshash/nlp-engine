@@ -31,7 +31,7 @@ export const getMachineResponseReducer = function (state = {}, iAction) {
     }
 }
 
-export const userLoginReducer = function(state=true, iAction){
+export const userLoginReducer = function(state=false, iAction){
     switch(iAction.type){
         case CONSTANT.USER_LOGGED_IN:
             return iAction.payload.isUserLoggedIn

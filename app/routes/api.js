@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const passport = require('passport')
 var nlp = require('../nltk/natural.js');
 
 var Intent = require('../models/intent');
@@ -8,8 +9,8 @@ Intent.find(function (err, iIntents) {
     if (err) {
         console.log("database giving problem on first intent")
     } else if (iIntents.length > 0) {
-        iIntents.forEach(function(iIntent){
-            iIntent.expressions.forEach(function(iExpression){
+        iIntents.forEach(function (iIntent) {
+            iIntent.expressions.forEach(function (iExpression) {
                 nlp.addClassifiedData(iExpression, iIntent.key);
             });
         })
@@ -30,7 +31,22 @@ Intent.find(function (err, iIntents) {
     }
 });
 
-router.get('/intents', function (req, res, next) {
+var isLoggedIn = function (req, res, next) {
+    if (req.isAuthenticated())
+        res.json(true);
+    res.json(false);
+}
+
+router.post('/login', passport.authenticate('local-login'), isLoggedIn);
+
+router.post('/signup', passport.authenticate('local-signup'), isLoggedIn);
+
+router.get('/logout', isLoggedIn, (req, res) => {
+    req.logout();
+    res.status(200).redirect('/');
+});
+
+router.get('/getintents', function (req, res, next) {
     Intent.find(function (err, iIntents) {
         if (err) {
             console.log('Error: ' + err);
@@ -55,7 +71,7 @@ router.post('/addintent', function (req, res, next) {
     })
 });
 
-router.post('/addintent/:_intent', function (req, res, next) {
+router.post('/addexpression/:_intent', function (req, res, next) {
     let expression = req.body.expression;
     Intent.findOne({
         "key": req.params._intent

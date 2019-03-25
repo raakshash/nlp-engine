@@ -1,6 +1,6 @@
 
 
-import { getIntents, addIntent, addExpression, addResponse, getResponse } from './apiRequest';
+import { getIntents, addIntent, addExpression, addResponse, getResponse, getUserLoggedIn, getUserSignuped } from './apiRequest';
 import {switchIntentSelectionState} from './methods';
 
 export const mapStateToProps = state => ({
@@ -28,5 +28,11 @@ export const mapDispatchToProps = dispatch => ({
     },
     onTestExpression: function (iState) {
         getResponse(dispatch, iState);
+    },
+    onUserLogin: function(iState){
+        getUserLoggedIn(dispatch, iState);
+    },
+    onUserSignup: function(iState){
+        getUserSignuped(dispatch, iState);
     }
 });

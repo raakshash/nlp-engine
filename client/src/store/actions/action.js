@@ -21,6 +21,14 @@ export const getAction = function (iType, iData) {
                 type: CONSTANTS.GET_RESPONSE,
                 payload: iData
             }
+        case CONSTANTS.USER_LOGGED_IN:{
+            return {
+                type: CONSTANTS.USER_LOGGED_IN,
+                payload: {
+                    isUserLoggedIn: iData
+                }
+            }
+        }
         default: return {}
     }
 }
