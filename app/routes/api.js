@@ -4,12 +4,16 @@ var nlp = require('../nltk/natural.js');
 
 var Intent = require('../models/intent');
 
-Intent.findOne({
-    "key": "createKitchen"
-}, function (err, iIntent) {
+Intent.find(function (err, iIntents) {
     if (err) {
         console.log("database giving problem on first intent")
-    }else if(!iIntent) {
+    } else if (iIntents.length > 0) {
+        iIntents.forEach(function(iIntent){
+            iIntent.expressions.forEach(function(iExpression){
+                nlp.addClassifiedData(iExpression, iIntent.key);
+            });
+        })
+    } else {
         var intent = new Intent({
             key: "createKitchen",
             value: "Create Kitchen",
@@ -78,7 +82,7 @@ router.post('/getresponse', function (req, res, next) {
     let data = nlp.getClassifiedData(req.body.expression).classification;
     let resToSend = "";
 
-    if(data.length > 0){
+    if (data.length > 0) {
         Intent.findOne({
             "key": data[0].label
         }, function (err, iIntent) {
@@ -93,7 +97,7 @@ router.post('/getresponse', function (req, res, next) {
                 res.json(resToSend);
             }
         });
-    }else{
+    } else {
         resToSend = "Not trained for this";
         res.json(resToSend)
     }
