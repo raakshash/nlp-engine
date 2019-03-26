@@ -11,7 +11,8 @@ require("./app/config/database.js").init();
 require('./app/config/passport.js').init(passport);
 
 // var indexRouter = require('./app/routes/index');
-var apiRouter = require('./app/routes/api');
+const apiRouter = require('./app/routes/api');
+const authenticateRouter = require('./app/routes/authenticate');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use(passport.session()); // persistent login sessions
 
 // app.use('/', indexRouter);
 app.use('/api', apiRouter);
+app.use('/authenticate', authenticateRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -30,5 +30,5 @@ IntentSchema.methods.makeKey = function (iString) {
     return finalKey;
 }
 
-var Intent = mongoose.model("Responses", IntentSchema);
+var Intent = mongoose.model("Intents", IntentSchema);
 module.exports = Intent;

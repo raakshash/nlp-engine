@@ -1,50 +1,7 @@
-var express = require('express');
-var router = express.Router();
-const passport = require('passport')
-var nlp = require('../nltk/natural.js');
-
-var Intent = require('../models/intent');
-
-Intent.find(function (err, iIntents) {
-    if (err) {
-        console.log("database giving problem on first intent")
-    } else if (iIntents.length > 0) {
-        iIntents.forEach(function (iIntent) {
-            iIntent.expressions.forEach(function (iExpression) {
-                nlp.addClassifiedData(iExpression, iIntent.key);
-            });
-        })
-    } else {
-        var intent = new Intent({
-            key: "createKitchen",
-            value: "Create Kitchen",
-            expressions: ["I want to create kitchen"],
-            responses: []
-        });
-        intent.save(function (err) {
-            if (err) {
-                console.log("Intenet is not saved successfully" + err);
-            } else {
-                nlp.addClassifiedData(intent.expressions[0], intent.key);
-            }
-        });
-    }
-});
-
-var isLoggedIn = function (req, res, next) {
-    if (req.isAuthenticated())
-        res.json(true);
-    res.json(false);
-}
-
-router.post('/login', passport.authenticate('local-login'), isLoggedIn);
-
-router.post('/signup', passport.authenticate('local-signup'), isLoggedIn);
-
-router.get('/logout', isLoggedIn, (req, res) => {
-    req.logout();
-    res.status(200).redirect('/');
-});
+const express = require('express');
+const router = express.Router();
+const nlp = require('../nltk/natural.js');
+const Intent = require('../models/intent');
 
 router.get('/getintents', function (req, res, next) {
     Intent.find(function (err, iIntents) {

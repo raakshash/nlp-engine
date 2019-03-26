@@ -3,7 +3,7 @@ import { switchIntentSelectionState } from './methods';
 import { getAction } from './action';
 
 export const getUserLoggedIn = function (iDispatch, iState) {
-    fetch('/api/login', {
+    fetch('/authenticate/login', {
         method: "POST",
         headers: {
             'Content-type': 'application/json'
@@ -18,7 +18,7 @@ export const getUserLoggedIn = function (iDispatch, iState) {
 }
 
 export const getUserSignuped = function (iDispatch, iState) {
-    fetch('/api/signup', {
+    fetch('/authenticate/signup', {
         method: "POST",
         headers: {
             'Content-type': 'application/json'
