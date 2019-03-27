@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const nlp = require('../nltk/natural.js');
 const Intent = require('../models/intent');
 
 router.get('/getintents', function (req, res, next) {
-    Intent.find(function (err, iIntents) {
+    Intent.find({
+        user: req.user._id
+    }, function (err, iIntents) {
         if (err) {
             console.log('Error: ' + err);
         } else {
@@ -15,6 +16,7 @@ router.get('/getintents', function (req, res, next) {
 
 router.post('/addintent', function (req, res, next) {
     let newIntent = new Intent();
+    newIntent.user = req.user._id;
     newIntent.key = newIntent.makeKey(req.body.intentName)
     newIntent.value = req.body.intentName;
     newIntent.expressions = [];
@@ -31,14 +33,16 @@ router.post('/addintent', function (req, res, next) {
 router.post('/addexpression/:_intent', function (req, res, next) {
     let expression = req.body.expression;
     Intent.findOne({
-        "key": req.params._intent
+        user: req.user._id
+    }, {
+        key: req.params._intent
     }, function (err, iIntent) {
         if (err) {
             console.log("No intent found: " + err);
         } else {
             iIntent.expressions.push(expression);
             if (expression != undefined) {
-                nlp.addClassifiedData(expression, iIntent.key);
+                NLP.addClassifiedData(expression, iIntent.key);
             }
             iIntent.save(function (err) {
                 if (err) {
@@ -52,12 +56,14 @@ router.post('/addexpression/:_intent', function (req, res, next) {
 });
 
 router.post('/getresponse', function (req, res, next) {
-    let data = nlp.getClassifiedData(req.body.expression).classification;
+    let data = NLP.getClassifiedData(req.body.expression).classification;
     let resToSend = "";
 
     if (data.length > 0) {
         Intent.findOne({
-            "key": data[0].label
+            user: req.user._id
+        }, {
+            key: data[0].label
         }, function (err, iIntent) {
             if (err) {
                 console.log("No intent found: " + err);
@@ -79,7 +85,9 @@ router.post('/getresponse', function (req, res, next) {
 router.post('/addresponse/:_intent', function (req, res, next) {
     var newResponse = req.body.response;
     Intent.findOne({
-        "key": req.params._intent
+        user: req.user._id
+    }, {
+        key: req.params._intent
     }, function (err, iIntent) {
         if (err) {
             console.log("No intent found: " + err);

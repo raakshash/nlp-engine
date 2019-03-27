@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 
 var IntentSchema = mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     key: {
         type: String,
         required: true

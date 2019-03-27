@@ -9,7 +9,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
-    "bcrypt": "^3.0.4",
+    "bcrypt-nodejs": "0.0.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
@@ -21,8 +21,6 @@
     "natural": "^0.6.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "react-redux": "^6.0.1",
-    "redux": "^4.0.1",
     "remove-stopwords": "^1.0.3",
     "stopword": "^0.1.13",
     "wordnet-db": "^3.1.11"
