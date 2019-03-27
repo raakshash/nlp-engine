@@ -2,9 +2,16 @@ node_modules
 .gitignore
 
 Dockerfile
+.dockerignore
 
 Jenkinsfile
 
 README.md
 
-client
+docker-compose.yml
+
+client/node_modules
+client/build
+client/Dockerfile
+client/.dockerignore
+client/nginx

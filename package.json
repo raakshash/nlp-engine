@@ -5,8 +5,11 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
+    "client-intsall": "npm install --prefix client",
+    "client-build": "npm run build --prefix client",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "prod": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",

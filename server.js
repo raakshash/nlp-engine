@@ -24,7 +24,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // required for passport
 app.use(session({
@@ -38,6 +37,15 @@ app.use(passport.session()); // persistent login sessions
 // app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/authenticate', authenticateRouter);
+
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static(path.resolve(__dirname, 'client', 'build')));
+  app.get('*', function(req, res){
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}else{
+  app.use(express.static(path.join(__dirname, 'public')));
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

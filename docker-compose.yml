@@ -1,0 +1,32 @@
+version: '0.1'
+services:
+  client:
+    container_name: numenedict_web
+    build: ./client
+    volumes:
+      - ./client/build:/var/www/localhost/numenedict/build
+    environment:
+      NODE_ENV: production
+    ports:
+      - 99:99
+    links:
+      - server:server
+  server:
+    container_name: numenedict_server
+    build: ./
+    volumes:
+      - ./:/nlp
+    environment:
+      NODE_ENV: production
+    ports:
+      - 97:97
+    links:
+      - mongo:mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ../database:/data
+    ports:
+      - 27017:27017
+
