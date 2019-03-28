@@ -1,0 +1,38 @@
+#!groovy
+import static java.util.UUID.randomUUID
+
+def containerName="numenedict"
+pipeline {	
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building.:${env.BRANCH_NAME}"
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                echo 'Test will be added...'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+                bat '''
+                git branch -d $TMP_MERGE_BRANCH || true
+                git branch $TMP_MERGE_BRANCH
+                git checkout $TMP_MERGE_BRANCH
+                docker build . -t ${containerName}
+                docker stop ${containerName}
+                docker rm ${containerName}
+                docker run -d -p 97:97 --name ${containerName} --link mongo ${containerName}
+                docker logs ${containerName}
+                git branch -d $TMP_MERGE_BRANCH
+                ''' 
+            }
+        }
+    }
+}
