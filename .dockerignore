@@ -15,3 +15,6 @@ client/build
 client/Dockerfile
 client/.dockerignore
 client/nginx
+
+docker-local-deploy.sh
+Jenkins-release-build
