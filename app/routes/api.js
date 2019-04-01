@@ -33,7 +33,8 @@ router.post('/addintent', function (req, res, next) {
 router.post('/addexpression/:_intent', function (req, res, next) {
     let expression = req.body.expression;
     Intent.findOne({
-        user: req.user._id,
+        user: req.user._id
+    }, {
         key: req.params._intent
     }, function (err, iIntent) {
         if (err) {
@@ -60,7 +61,8 @@ router.post('/getresponse', function (req, res, next) {
 
     if (data.length > 0) {
         Intent.findOne({
-            user: req.user._id,
+            user: req.user._id
+        }, {
             key: data[0].label
         }, function (err, iIntent) {
             if (err) {
@@ -83,7 +85,8 @@ router.post('/getresponse', function (req, res, next) {
 router.post('/addresponse/:_intent', function (req, res, next) {
     var newResponse = req.body.response;
     Intent.findOne({
-        user: req.user._id,
+        user: req.user._id
+    }, {
         key: req.params._intent
     }, function (err, iIntent) {
         if (err) {

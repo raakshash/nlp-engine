@@ -20,9 +20,9 @@ COPY . /nlp
 
 RUN npm install && \
     npm run client-intsall && \
-    npm run client-build && \
-    mv /nlp/client/build/* /nlp/public && \
-    rm -rf /nlp/client/*
+    npm run client-build
+#     mv /nlp/client/build /nlp/public && \
+#     rm -rf /nlp/client
 
 # Build react/vue/angular bundle static files
 # RUN npm run build
