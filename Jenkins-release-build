@@ -22,11 +22,11 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 bat '''
-                docker build . -t ${containerName}
-                docker stop ${containerName}
-                docker rm ${containerName}
-                docker run -d -p 97:97 --name ${containerName} --link mongo ${containerName}
-                docker logs ${containerName}
+                docker build . -t numenedict
+                docker stop numenedict
+                docker rm numenedict
+                docker run -d -p 97:97 --name numenedict --link mongo numenedict
+                docker logs numenedict
                 ''' 
             }
         }
