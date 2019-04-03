@@ -66,8 +66,10 @@ router.post('/getresponse', function (req, res, next) {
             if (err) {
                 console.log("No intent found: " + err);
             } else {
-                let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
-                resToSend = iIntent.responses[replyRandomIndex];
+                if (iIntent.responses.length > 0) {
+                    let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
+                    resToSend = iIntent.responses[replyRandomIndex];
+                }
                 if (resToSend == undefined || resToSend == "") {
                     resToSend = "Not trained for this";
                 }

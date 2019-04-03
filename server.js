@@ -7,6 +7,11 @@ var debug = require('debug')('nlp-engine:server');
 var http = require('http');
 const passport = require('passport');
 var session = require('express-session');
+
+require('dotenv').config({
+  path: 'variables.env'
+});
+  
 require("./app/config/database.js").init();
 require('./app/config/passport.js').init(passport);
 
