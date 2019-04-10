@@ -25,7 +25,7 @@ export const getAction = function (iType, iData) {
             return {
                 type: CONSTANTS.USER_LOGGED_IN,
                 payload: {
-                    isUserLoggedIn: iData
+                    userLoginData: iData
                 }
             }
         }

@@ -54,6 +54,27 @@ router.post('/addexpression/:_intent', function (req, res, next) {
     });
 });
 
+router.post('/addresponse/:_intent', function (req, res, next) {
+    var newResponse = req.body.response;
+    Intent.findOne({
+        user: req.user._id,
+        key: req.params._intent
+    }, function (err, iIntent) {
+        if (err) {
+            console.log("No intent found: " + err);
+        } else {
+            iIntent.responses.push(newResponse);
+            iIntent.save(function (err) {
+                if (err) {
+                    console.log("Intenet is not saved successfully" + err);
+                } else {
+                    res.json(iIntent);
+                }
+            })
+        }
+    });
+});
+
 router.post('/getresponse', function (req, res, next) {
     let data = NLP.getClassifiedData(req.body.expression).classification;
     let resToSend = "";
@@ -82,25 +103,32 @@ router.post('/getresponse', function (req, res, next) {
     }
 });
 
-router.post('/addresponse/:_intent', function (req, res, next) {
-    var newResponse = req.body.response;
-    Intent.findOne({
-        user: req.user._id,
-        key: req.params._intent
-    }, function (err, iIntent) {
-        if (err) {
-            console.log("No intent found: " + err);
-        } else {
-            iIntent.responses.push(newResponse);
-            iIntent.save(function (err) {
-                if (err) {
-                    console.log("Intenet is not saved successfully" + err);
-                } else {
-                    res.json(iIntent);
+router.get('/getresponsewebservice/:_accessID', function(req, res, next){
+    let data = NLP.getClassifiedData(req.body.expression).classification;
+    let resToSend = "";
+
+    if (data.length > 0) {
+        Intent.findOne({
+            user: _accessID,
+            key: data[0].label
+        }, function (err, iIntent) {
+            if (err) {
+                console.log("No intent found: " + err);
+            } else {
+                if (iIntent.responses.length > 0) {
+                    let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
+                    resToSend = iIntent.responses[replyRandomIndex];
                 }
-            })
-        }
-    });
+                if (resToSend == undefined || resToSend == "") {
+                    resToSend = "Not trained for this";
+                }
+                res.json(resToSend);
+            }
+        });
+    } else {
+        resToSend = "Not trained for this";
+        res.json(resToSend)
+    }
 });
 
 module.exports = router;

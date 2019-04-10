@@ -15,7 +15,7 @@ class LeftComp extends Component {
                 <div className="button-box">
                     <button
                         className="list-group-item list-group-item-action list-group-item-secondary"
-                        onClick={this.props.onGetIntents}><span>Intents</span></button>
+                        onClick={this.props.onIntentViewSwitch.bind(this, this.props.isIntentViewActive)}><span>Intents</span></button>
                 </div>
             </div>
         );

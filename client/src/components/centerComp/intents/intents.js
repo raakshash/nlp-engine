@@ -11,6 +11,9 @@ class IntentList extends Component {
         this.submitHandler = this.submitHandler.bind(this);
         this.setValue = this.setValue.bind(this);
     }
+    componentWillMount(){
+        this.props.onComponentInit();
+    }
     submitHandler(event) {
         event.preventDefault();
         this.props.onIntentAdded(this.state);

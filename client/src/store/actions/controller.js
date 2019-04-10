@@ -12,8 +12,8 @@ export const getUserLoggedIn = function (iDispatch, iState) {
     })
         .then(res => res.json())
         .catch(iError => false)
-        .then(iIsUserLoggedIn => {
-            iDispatch(getAction(CONSTANTS.USER_LOGGED_IN, iIsUserLoggedIn));
+        .then(iUserLoginData => {
+            iDispatch(getAction(CONSTANTS.USER_LOGGED_IN, iUserLoginData));
         });
 }
 
@@ -26,8 +26,8 @@ export const getUserSignuped = function (iDispatch, iState) {
         body: JSON.stringify(iState)
     })
         .then(res => res.json())
-        .then(iIsUserSignuped => {
-            iDispatch(getAction(CONSTANTS.USER_LOGGED_IN, iIsUserSignuped));
+        .then(iUserLoginData => {
+            iDispatch(getAction(CONSTANTS.USER_LOGGED_IN, iUserLoginData));
         });
 }
 

@@ -35,12 +35,18 @@ const initMachineLearning = function (iUser) {
 
 
 var isLoggedIn = function (req, res, next) {
+    let loginResponse = {
+        isUserLoggedIn: false,
+        webservice: ""
+    }
     if (req.isAuthenticated()) {
         global.NLP = nlp;
         initMachineLearning(req.user);
-        res.json(true);
+        loginResponse.isUserLoggedIn = true;
+        loginResponse.webservice = "http://nkr4w10plp:97/getresponsewebservice/"+req.user._id;
+        res.json(loginResponse);
     } else {
-        res.json(false);
+        res.json(loginResponse);
     }
 }
 

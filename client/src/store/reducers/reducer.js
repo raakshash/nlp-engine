@@ -31,10 +31,18 @@ export const getMachineResponseReducer = function (state = {}, iAction) {
     }
 }
 
-export const userLoginReducer = function(state=false, iAction){
+export const userLoginReducer = function(state={isUserLoggedIn: false}, iAction){
     switch(iAction.type){
         case CONSTANT.USER_LOGGED_IN:
-            return iAction.payload.isUserLoggedIn
+            return iAction.payload.userLoginData
+        default: return state;
+    }
+}
+
+export const switchIntentViewReducer = function (state=false, iAction) {
+    switch (iAction.type) {
+        case CONSTANT.SWITCH_INTENT_VIEW:
+            return iAction.payload.isIntentViewActive;
         default: return state;
     }
 }

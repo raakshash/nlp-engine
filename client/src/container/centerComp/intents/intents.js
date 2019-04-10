@@ -1,6 +1,6 @@
 
 
-import { addIntent } from '../../../store/actions/controller';
+import { addIntent, getIntents } from '../../../store/actions/controller';
 import {switchIntentSelectionState} from '../../../store/actions/methods';
 
 export const mapStateToProps = state => ({
@@ -13,5 +13,8 @@ export const mapDispatchToProps = dispatch => ({
     },
     switchIntentSelection: function (iIntent) {
         switchIntentSelectionState(dispatch, iIntent);
+    },
+    onComponentInit: function(){
+        getIntents(dispatch);
     }
 });

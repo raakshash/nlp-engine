@@ -1,13 +1,12 @@
 
-
-import { getIntents } from '../../store/actions/controller';
+import { switchIntentViewActive} from '../../store/actions/methods';
 
 export const mapStateToProps = state => ({
-    
+    isIntentViewActive: state.isIntentViewActive
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onGetIntents: function () {
-        getIntents(dispatch);
+    onIntentViewSwitch: function(iIsIntentViewActive){
+        switchIntentViewActive(dispatch, !iIsIntentViewActive);
     }
 });

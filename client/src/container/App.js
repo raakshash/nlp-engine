@@ -1,7 +1,7 @@
 
 
 export const mapStateToProps = state => ({
-    isUserLoggedIn: state.isUserLoggedIn
+    isUserLoggedIn: state.userLoginData.isUserLoggedIn
 });
 
 export const mapDispatchToProps = dispatch => ({
