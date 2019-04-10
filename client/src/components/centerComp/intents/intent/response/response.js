@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../../../../container/centerComp/intents/intent/response/response';
 
 class Response extends Component {
     constructor() {
@@ -12,11 +14,11 @@ class Response extends Component {
     }
 
     componentWillMount() {
-        this.setState({ intent: this.props.context.currentIntentSelected, response: "" })
+        this.setState({ intent: this.props.currentIntentSelected, response: "" })
     }
     submitResponseHandler(event) {
         event.preventDefault();
-        this.props.context.onResponseAdded(this.state);
+        this.props.onResponseAdded(this.state);
         this.setState({ response: '' });
     }
     setResponseValue(event) {
@@ -36,7 +38,7 @@ class Response extends Component {
                 </form>
                 <br />
                 <div className="list-group">
-                    {this.props.context.currentIntentSelected.responses.map((iResponse, index) =>
+                    {this.props.currentIntentSelected.responses.map((iResponse, index) =>
                         <li key={index} className="list-group-item">{iResponse}</li>
                     )}
                 </div>
@@ -45,4 +47,4 @@ class Response extends Component {
     }
 }
 
-export default Response;
+export default connect(mapStateToProps, mapDispatchToProps)(Response);

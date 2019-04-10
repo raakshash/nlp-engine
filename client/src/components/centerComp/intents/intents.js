@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../../container/centerComp/intents/intents';
 
 class IntentList extends Component {
     constructor() {
@@ -11,7 +13,7 @@ class IntentList extends Component {
     }
     submitHandler(event) {
         event.preventDefault();
-        this.props.context.onIntentAdded(this.state);
+        this.props.onIntentAdded(this.state);
         this.setState({ intentName: '' });
     }
     setValue(event) {
@@ -35,10 +37,10 @@ class IntentList extends Component {
                 </div>
                 <div className="container-fluid wrapper">
                     <div className="list-group">
-                        {this.props.context.intents.map(iIntent =>
+                        {this.props.intents.map(iIntent =>
                             <button 
                             key={iIntent.key} 
-                            onClick={this.props.context.switchIntentSelection.bind(this, iIntent)} 
+                            onClick={this.props.switchIntentSelection.bind(this, iIntent)} 
                             className="list-group-item list-group-item-action list-group-item-secondary">
                             {iIntent.value}</button>
                         )}
@@ -49,4 +51,4 @@ class IntentList extends Component {
     }
 }
 
-export default IntentList;
+export default connect(mapStateToProps, mapDispatchToProps)(IntentList);

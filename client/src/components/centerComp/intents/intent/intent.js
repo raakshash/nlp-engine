@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../../../container/centerComp/intents/intent/intent';
 import Expressions from './expression/expression';
 import Response from './response/response';
 
@@ -8,16 +10,16 @@ class Intent extends Component {
             <div className="container">
                 <div className="container">
                     <br />
-                    <h2>{this.props.context.currentIntentSelected.value}</h2>
+                    <h2>{this.props.currentIntentSelected.value}</h2>
                 </div>
                 <hr />
                 <div className="container-fluid wrapper">
-                    <Expressions context={this.props.context} />
-                    <Response context={this.props.context}/>
+                    <Expressions />
+                    <Response />
                 </div>
             </div>
         );
     }
 }
 
-export default Intent;
+export default connect(mapStateToProps, mapDispatchToProps)(Intent);

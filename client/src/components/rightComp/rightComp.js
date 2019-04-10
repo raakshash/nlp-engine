@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../container/rightComp/rightComp';
 import './rightComp.css';
 import PropTypes from 'prop-types'
 import SpeechRecognition from 'react-speech-recognition'
 
 
 const propTypes = {
-    // Props injected by SpeechRecognition
-    transcript: PropTypes.string,
-    resetTranscript: PropTypes.func,
     startListening: PropTypes.func,
     stopListening: PropTypes.func,
-    browserSupportsSpeechRecognition: PropTypes.bool,
-    recognition: PropTypes.object,
-    finalTranscript: PropTypes.string
+    recognition: PropTypes.object
 }
 
 class RightComp extends Component {
@@ -38,7 +35,7 @@ class RightComp extends Component {
             self.setState({ expression: text });
         };
         this.props.recognition.onend = function (event) {
-            self.props.context.onTestExpression(self.state);
+            self.props.onTestExpression(self.state);
             self.setState({ expression: '' });
         };
         this.props.recognition.onerror = function (event) {
@@ -48,7 +45,7 @@ class RightComp extends Component {
     onTestExpressionSubmit(event) {
         event.preventDefault();
         let self = this;
-        this.props.context.onTestExpression(self.state);
+        this.props.onTestExpression(self.state);
         self.setState({ expression: '' });
     }
     setValue(event) {
@@ -65,14 +62,10 @@ class RightComp extends Component {
             self.props.startListening();
         } else {
             self.setState({ expression: '' });
-            // self.props.resetTranscript();
             self.props.stopListening();
         }
     }
     render() {
-        // if (!this.props.browserSupportsSpeechRecognition) {
-        //     return (<p>Your browser doesn't allow speech recognition</p>)
-        // }
         return (
             <div className="col-3 col-lg-3 col-sm-3 col-xs-3">
                 <div className="row">
@@ -91,8 +84,8 @@ class RightComp extends Component {
                     </div>
                 </div><br />
                 <div className="container">
-                    <h3>{this.props.context.responseData.expression}</h3>
-                    {this.props.context.responseData.response}
+                    <h3>{this.props.responseData.expression}</h3>
+                    {this.props.responseData.response}
                 </div>
             </div>
 
@@ -106,4 +99,4 @@ const options = {
 }
 RightComp.propTypes = propTypes
 
-export default SpeechRecognition(options)(RightComp);
+export default connect(mapStateToProps, mapDispatchToProps)(SpeechRecognition(options)(RightComp));

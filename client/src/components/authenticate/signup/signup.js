@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../../container/authenticate/signup/signup';
 
 class Signup extends Component {
     constructor() {
@@ -14,7 +16,7 @@ class Signup extends Component {
 
     signupSubmitHandler(event) {
         event.preventDefault();
-        this.props.context.onUserSignup(this.state);
+        this.props.onUserSignup(this.state);
         this.setState({ username: "", password: "" })
     }
     setSignupUsernameValue(event) {
@@ -51,4 +53,4 @@ class Signup extends Component {
     }
 }
 
-export default Signup;
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

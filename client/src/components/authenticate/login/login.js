@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../../container/authenticate/login/login';
 
 class Login extends Component {
     constructor() {
@@ -14,7 +16,7 @@ class Login extends Component {
 
     loginSubmitHandler(event) {
         event.preventDefault();
-        this.props.context.onUserLogin(this.state);
+        this.props.onUserLogin(this.state);
         this.setState({ username: "", password: "" })
     }
     setLoginUsernameValue(event) {
@@ -50,4 +52,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

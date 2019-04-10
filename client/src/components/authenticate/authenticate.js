@@ -19,9 +19,9 @@ class Authenticate extends Component {
 
     renderSignupLoginPage() {
         if (this.state.isSignupActive) {
-            return <Signup context={this.props.context} switchState={this.switchState} />
+            return <Signup switchState={this.switchState} />
         } else {
-            return <Login context={this.props.context} switchState={this.switchState} />
+            return <Login switchState={this.switchState} />
         }
     }
 

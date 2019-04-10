@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../../../../container/centerComp/intents/intent/expression/expression';
 
 class Expressions extends Component {
     constructor() {
@@ -12,11 +14,11 @@ class Expressions extends Component {
     }
 
     componentWillMount() {
-        this.setState({ intent: this.props.context.currentIntentSelected, expression: "" })
+        this.setState({ intent: this.props.currentIntentSelected, expression: "" })
     }
     submitExpressionHandler(event) {
         event.preventDefault();
-        this.props.context.onExpressionAdded(this.state);
+        this.props.onExpressionAdded(this.state);
         this.setState({ expression: '' });
     }
     setExpressionValue(event) {
@@ -36,7 +38,7 @@ class Expressions extends Component {
                 </form>
                 <br />
                 <div className="list-group">
-                    {this.props.context.currentIntentSelected.expressions.map((iExpression, index) =>
+                    {this.props.currentIntentSelected.expressions.map((iExpression, index) =>
                         <li key={index} className="list-group-item">{iExpression}</li>
                     )}
                 </div>
@@ -45,4 +47,4 @@ class Expressions extends Component {
     }
 }
 
-export default Expressions;
+export default connect(mapStateToProps, mapDispatchToProps)(Expressions);

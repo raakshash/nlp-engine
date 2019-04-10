@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../container/centerComp/centerComp';
 import './centerComp.css';
 
 import IntentList from './intents/intents';
@@ -11,16 +13,16 @@ class CenterComp extends Component {
     }
 
     renderIntents() {
-        if (this.props.context.currentIntentSelected != undefined) {
-            return <Intent context={this.props.context} />
-        } else if (this.props.context.intents.length > 0) {
-            return <IntentList context={this.props.context} />
+        if (this.props.currentIntentSelected != undefined) {
+            return <Intent />
+        } else if (this.props.intents.length > 0) {
+            return <IntentList />
         } else {
             return <div className="d-flex flex-column justify-content-center align-items-center h-100">
-                    <h1>This is Numenedict</h1>
-                    <hr/>
-                    <p>Here you can create your own model to teach your bot</p>
-                </div>;
+                <h1>This is Numenedict</h1>
+                <hr />
+                <p>Here you can create your own model to teach your bot</p>
+            </div>;
         }
     }
     render() {
@@ -32,4 +34,4 @@ class CenterComp extends Component {
     }
 }
 
-export default CenterComp;
+export default connect(mapStateToProps, mapDispatchToProps)(CenterComp);

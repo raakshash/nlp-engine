@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../../container/leftComp/leftComp';
 import './leftComp.css';
 
 class LeftComp extends Component {
@@ -11,13 +13,13 @@ class LeftComp extends Component {
                 </div>
                 <hr />
                 <div className="button-box">
-                    <button 
-                    className="list-group-item list-group-item-action list-group-item-secondary"
-                    onClick={this.props.getIntents}><span>Intents</span></button>
+                    <button
+                        className="list-group-item list-group-item-action list-group-item-secondary"
+                        onClick={this.props.onGetIntents}><span>Intents</span></button>
                 </div>
             </div>
         );
     }
 }
 
-export default LeftComp;
+export default connect(mapStateToProps, mapDispatchToProps)(LeftComp);
