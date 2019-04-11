@@ -1,5 +1,4 @@
 const natural = require('natural');
-const sw = require('stopword');
 const Analyzer = natural.SentimentAnalyzer;
 
 class NLP {

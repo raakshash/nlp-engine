@@ -28,7 +28,6 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "remove-stopwords": "^1.0.3",
-    "stopword": "^0.1.13",
     "wordnet-db": "^3.1.11"
   },
   "devDependencies": {

@@ -15,7 +15,7 @@ class CenterComp extends Component {
     createWebserviceUserGuide() {
         if (this.props.ws !== "" && this.props.ws !== undefined) {
             return (<div className="container-fluid"><br/><hr/><br/>
-            <h5>Use following webservice to for integration:</h5>
+            <h5>Use following webservice for integration:</h5>
             <div className="md-form active-cyan-2 mb-3">
                 <input
                     value={this.props.ws}
@@ -31,7 +31,7 @@ class CenterComp extends Component {
             return <IntentList />
         } else {
             return <div className="d-flex flex-column justify-content-center align-items-center h-100">
-                <h1>This is Numenedict</h1>
+                <h1>Welcome to Numenedict</h1>
                 <hr />
                 <p>Here you can create your own model to teach your bot</p>
                 {this.createWebserviceUserGuide()}

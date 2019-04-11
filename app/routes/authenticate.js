@@ -41,7 +41,13 @@ var isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         initMachineLearning(req.user);
         loginResponse.isUserLoggedIn = true;
-        loginResponse.webservice = "http://nkr4w10plp:97/api/getresponsewebservice/"+req.user._id;
+        loginResponse.webservice = "http://nkr4w10plp";
+        if(process.env.NODE_ENV === "production"){
+            loginResponse.webservice += ":97";
+        }else{
+            loginResponse.webservice += ":9999";
+        }
+        loginResponse.webservice += "/webservice/getresponse/"+req.user._id;
         res.json(loginResponse);
     } else {
         res.json(loginResponse);

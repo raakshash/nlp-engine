@@ -17,6 +17,7 @@ require('./app/config/passport.js').init(passport);
 // var indexRouter = require('./app/routes/index');
 const apiRouter = require('./app/routes/api');
 const authenticateRouter = require('./app/routes/authenticate');
+const webserviceRouter = require('./app/routes/webservice');
 
 var app = express();
 
@@ -41,6 +42,7 @@ app.use(passport.session()); // persistent login sessions
 // app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/authenticate', authenticateRouter);
+app.use('/webservice', webserviceRouter);
 
 if(process.env.NODE_ENV === 'production'){
   app.use(express.static(path.resolve(__dirname, 'public')));
