@@ -1,27 +1,32 @@
-const restler = require('restler');
-const assert = require('chai').assert;
+const axios = require('axios');
+const expect = require('chai').expect;
 require('dotenv').config({
     path: 'variables.env'
 });
 
 describe('Test API', () => {
-    describe('getintent testing', () => {
-        it('should return more than 0 intent with status 200', (done) => {
+    describe('webservice get response testing', () => {
+        it('should return more than 0 intent with status 200', () => {
             let options = {
-                user: process.env.testid
-            }
-            restler.get('http://localhost:3000/api/getintents', options).on('success', function (data) {
-                assert.ok(data);
-            });
-        });
-    });
-    describe('addintent testing', () => {
-        it('should return more than 0 intent with status 200', (done) => {
-            let options = {
-                user: process.env.testid
-            }
-            restler.post('http://localhost:3000/api/addintent', options).on('success', function (data) {
-                assert.ok(data);
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    expression: "add product"
+                })
+            };
+            axios.post('http://nkr4w10plp:97/webservice/getresponse/5c9bab3c7225328bd4a90459', {
+                expression: "create kitchen"
+            })
+            .then(function(iRes){
+                console.log(iRes.data);
+                expect(iRes.data).not.equal(null);
+            })
+            .catch(function(iReason){
+                console.log("Error: "+iReason);
             });
         });
     });

@@ -10,12 +10,14 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client-test": "npm run test --prefix client",
+    "test": "mocha",
     "prod": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "chai": "^4.2.0",
     "cookie-parser": "~1.4.3",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^7.0.0",
     "express": "~4.16.0",
@@ -31,7 +33,7 @@
     "wordnet-db": "^3.1.11"
   },
   "devDependencies": {
-    "concurrently": "^4.1.0",
-    "restler": "^3.4.0"
+    "axios": "^0.18.0",
+    "concurrently": "^4.1.0"
   }
 }

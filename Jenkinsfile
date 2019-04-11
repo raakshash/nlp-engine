@@ -37,7 +37,9 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing...'
-                echo 'Test will be added...'
+                bat '''
+                npm run test
+                '''
             }
         }
 

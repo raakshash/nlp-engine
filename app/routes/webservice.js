@@ -3,6 +3,7 @@ const router = express.Router();
 const Intent = require('../models/intent');
 
 router.post('/getresponse/:_accessID', function(req, res, next){
+    res.setHeader('Access-Control-Allow-Origin', '*');
     let data = NLP.getClassifiedData(req.body.expression).classification;
     let resToSend = "";
 
