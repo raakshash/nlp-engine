@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const Intent = require('../models/intent');
-const nlp = require('../nltk/natural.js');
 
 const initMachineLearning = function (iUser) {
     Intent.find({user: iUser._id},function (err, iIntents) {
@@ -40,10 +39,9 @@ var isLoggedIn = function (req, res, next) {
         webservice: ""
     }
     if (req.isAuthenticated()) {
-        global.NLP = nlp;
         initMachineLearning(req.user);
         loginResponse.isUserLoggedIn = true;
-        loginResponse.webservice = "http://nkr4w10plp:97/getresponsewebservice/"+req.user._id;
+        loginResponse.webservice = "http://nkr4w10plp:97/api/getresponsewebservice/"+req.user._id;
         res.json(loginResponse);
     } else {
         res.json(loginResponse);

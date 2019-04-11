@@ -7,6 +7,9 @@ var debug = require('debug')('nlp-engine:server');
 var http = require('http');
 const passport = require('passport');
 var session = require('express-session');
+const nlp = require('./app/nltk/natural');
+
+global.NLP = nlp;
   
 require("./app/config/database.js").init();
 require('./app/config/passport.js').init(passport);

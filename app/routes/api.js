@@ -103,13 +103,13 @@ router.post('/getresponse', function (req, res, next) {
     }
 });
 
-router.get('/getresponsewebservice/:_accessID', function(req, res, next){
+router.post('/getresponsewebservice/:_accessID', function(req, res, next){
     let data = NLP.getClassifiedData(req.body.expression).classification;
     let resToSend = "";
 
     if (data.length > 0) {
         Intent.findOne({
-            user: _accessID,
+            user: req.params._accessID,
             key: data[0].label
         }, function (err, iIntent) {
             if (err) {
