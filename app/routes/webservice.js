@@ -5,7 +5,7 @@ const Intent = require('../models/intent');
 router.post('/getresponse/:_accessID', function(req, res, next){
     res.setHeader('Access-Control-Allow-Origin', '*');
     let data = NLP.getClassifiedData(req.body.expression).classification;
-    let resToSend = "";
+    let resToSend = "Not trained for this";
 
     if (data.length > 0) {
         Intent.findOne({
@@ -14,7 +14,7 @@ router.post('/getresponse/:_accessID', function(req, res, next){
         }, function (err, iIntent) {
             if (err) {
                 console.log("No intent found: " + err);
-            } else {
+            } else if(iIntent) {
                 if (iIntent.responses.length > 0) {
                     let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
                     resToSend = iIntent.responses[replyRandomIndex];
@@ -23,10 +23,11 @@ router.post('/getresponse/:_accessID', function(req, res, next){
                     resToSend = "Not trained for this";
                 }
                 res.json({fulfillment: resToSend});
+            }else{
+                res.json({fulfillment: resToSend});
             }
         });
     } else {
-        resToSend = "Not trained for this";
         res.json({fulfillment: resToSend});
     }
 });

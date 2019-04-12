@@ -38,7 +38,7 @@ router.post('/addexpression/:_intent', function (req, res, next) {
     }, function (err, iIntent) {
         if (err) {
             console.log("No intent found: " + err);
-        } else {
+        } else if(iIntent) {
             iIntent.expressions.push(expression);
             if (expression != undefined) {
                 NLP.addClassifiedData(expression, iIntent.key);
@@ -50,6 +50,8 @@ router.post('/addexpression/:_intent', function (req, res, next) {
                     res.json(iIntent);
                 }
             });
+        }else{
+            console.log("No intent found: " + err);
         }
     });
 });
@@ -62,7 +64,7 @@ router.post('/addresponse/:_intent', function (req, res, next) {
     }, function (err, iIntent) {
         if (err) {
             console.log("No intent found: " + err);
-        } else {
+        } else if(iIntent) {
             iIntent.responses.push(newResponse);
             iIntent.save(function (err) {
                 if (err) {
@@ -71,13 +73,15 @@ router.post('/addresponse/:_intent', function (req, res, next) {
                     res.json(iIntent);
                 }
             })
+        }else{
+            console.log("No intent found: " + err);
         }
     });
 });
 
 router.post('/getresponse', function (req, res, next) {
     let data = NLP.getClassifiedData(req.body.expression).classification;
-    let resToSend = "";
+    let resToSend = "Not trained for this";
 
     if (data.length > 0) {
         Intent.findOne({
@@ -86,7 +90,7 @@ router.post('/getresponse', function (req, res, next) {
         }, function (err, iIntent) {
             if (err) {
                 console.log("No intent found: " + err);
-            } else {
+            } else if(iIntent) {
                 if (iIntent.responses.length > 0) {
                     let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
                     resToSend = iIntent.responses[replyRandomIndex];
@@ -95,38 +99,11 @@ router.post('/getresponse', function (req, res, next) {
                     resToSend = "Not trained for this";
                 }
                 res.json(resToSend);
+            }else{
+                res.json(resToSend)
             }
         });
     } else {
-        resToSend = "Not trained for this";
-        res.json(resToSend)
-    }
-});
-
-router.post('/getresponsewebservice/:_accessID', function(req, res, next){
-    let data = NLP.getClassifiedData(req.body.expression).classification;
-    let resToSend = "";
-
-    if (data.length > 0) {
-        Intent.findOne({
-            user: req.params._accessID,
-            key: data[0].label
-        }, function (err, iIntent) {
-            if (err) {
-                console.log("No intent found: " + err);
-            } else {
-                if (iIntent.responses.length > 0) {
-                    let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
-                    resToSend = iIntent.responses[replyRandomIndex];
-                }
-                if (resToSend == undefined || resToSend == "") {
-                    resToSend = "Not trained for this";
-                }
-                res.json(resToSend);
-            }
-        });
-    } else {
-        resToSend = "Not trained for this";
         res.json(resToSend)
     }
 });
