@@ -22,12 +22,12 @@ router.post('/getresponse/:_accessID', function(req, res, next){
                 if (resToSend == undefined || resToSend == "") {
                     resToSend = "Not trained for this";
                 }
-                res.json(resToSend);
+                res.json({fulfillment: resToSend});
             }
         });
     } else {
         resToSend = "Not trained for this";
-        res.json(resToSend)
+        res.json({fulfillment: resToSend});
     }
 });
 
