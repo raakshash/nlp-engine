@@ -80,13 +80,13 @@ router.post('/addresponse/:_intent', function (req, res, next) {
 });
 
 router.post('/getresponse', function (req, res, next) {
-    let data = NLP.getClassifiedData(req.body.expression).classification;
+    let data = NLP.getClassifiedData(req.body.expression).classified;
     let resToSend = "Not trained for this";
 
-    if (data.length > 0) {
+    if (data != undefined) {
         Intent.findOne({
             user: req.user._id,
-            key: data[0].label
+            key: data
         }, function (err, iIntent) {
             if (err) {
                 console.log("No intent found: " + err);

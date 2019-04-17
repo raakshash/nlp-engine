@@ -4,13 +4,13 @@ const Intent = require('../models/intent');
 
 router.post('/getresponse/:_accessID', function(req, res, next){
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let data = NLP.getClassifiedData(req.body.expression).classification;
+    let data = NLP.getClassifiedData(req.body.expression).classified;
     let resToSend = "Not trained for this";
 
-    if (data.length > 0) {
+    if (data != undefined) {
         Intent.findOne({
             user: req.params._accessID,
-            key: data[0].label
+            key: data
         }, function (err, iIntent) {
             if (err) {
                 console.log("No intent found: " + err);
