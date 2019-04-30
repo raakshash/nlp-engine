@@ -38,23 +38,21 @@ var createWSServiceURL = function (iUserID, iLoginResponse) {
     const exec = require('child_process').execSync;
     iLoginResponse.isUserLoggedIn = true;
     iLoginResponse.webservice = "http://";
-    try {
-        let hostname = Buffer.from(exec("hostname")).toString('utf8');
-        iLoginResponse.webservice += hostname;
-    } catch (err) {
-        console.log("no hostname");
-    }
-
-    try {
-        let dnsdomainname = Buffer.from(exec("dnsdomainname")).toString('utf8');;
-        iLoginResponse.webservice += '.';
-        iLoginResponse.webservice += dnsdomainname;
-    } catch (err) {
-        console.log("no dns domain name");
-    }
     if (process.env.NODE_ENV === "production") {
+        if (process.env.HOST_NAME != undefined && process.env.HOST_NAME != "") {
+            iLoginResponse.webservice += process.env.HOST_NAME;
+        }
+        if (process.env.DNS_DOMAINNAME != undefined && process.env.DNS_DOMAINNAME != "") {
+            iLoginResponse.webservice += process.env.DNS_DOMAINNAME;
+        }
         iLoginResponse.webservice += ":97";
     } else {
+        try {
+            let hostname = Buffer.from(exec("hostname")).toString('utf8');
+            iLoginResponse.webservice += hostname;
+        } catch (err) {
+            console.log("no hostname");
+        }
         iLoginResponse.webservice += ":9999";
     }
     iLoginResponse.webservice += "/webservice/getresponse/" + iUserID;
