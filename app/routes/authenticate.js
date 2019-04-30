@@ -4,7 +4,9 @@ const passport = require('passport');
 const Intent = require('../models/intent');
 
 const initMachineLearning = function (iUser) {
-    Intent.find({user: iUser._id},function (err, iIntents) {
+    Intent.find({
+        user: iUser._id
+    }, function (err, iIntents) {
         if (err) {
             console.log("database giving problem on first intent")
         } else if (iIntents.length > 0) {
@@ -32,6 +34,32 @@ const initMachineLearning = function (iUser) {
     });
 }
 
+var createWSServiceURL = function (iUserID, iLoginResponse) {
+    const exec = require('child_process').execSync;
+    iLoginResponse.isUserLoggedIn = true;
+    iLoginResponse.webservice = "http://";
+    try {
+        let hostname = Buffer.from(exec("hostname")).toString('utf8');
+        iLoginResponse.webservice += hostname;
+    } catch (err) {
+        console.log("no hostname");
+    }
+
+    try {
+        let dnsdomainname = Buffer.from(exec("dnsdomainname")).toString('utf8');;
+        iLoginResponse.webservice += '.';
+        iLoginResponse.webservice += dnsdomainname;
+    } catch (err) {
+        console.log("no dns domain name");
+    }
+    if (process.env.NODE_ENV === "production") {
+        iLoginResponse.webservice += ":97";
+    } else {
+        iLoginResponse.webservice += ":9999";
+    }
+    iLoginResponse.webservice += "/webservice/getresponse/" + iUserID;
+}
+
 
 var isLoggedIn = function (req, res, next) {
     let loginResponse = {
@@ -40,14 +68,7 @@ var isLoggedIn = function (req, res, next) {
     }
     if (req.isAuthenticated()) {
         initMachineLearning(req.user);
-        loginResponse.isUserLoggedIn = true;
-        loginResponse.webservice = "http://nkr4w10plp";
-        if(process.env.NODE_ENV === "production"){
-            loginResponse.webservice += ":97";
-        }else{
-            loginResponse.webservice += ":9999";
-        }
-        loginResponse.webservice += "/webservice/getresponse/"+req.user._id;
+        createWSServiceURL(req.user._id, loginResponse);
         res.json(loginResponse);
     } else {
         res.json(loginResponse);
