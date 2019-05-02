@@ -43,6 +43,7 @@ var createWSServiceURL = function (iUserID, iLoginResponse) {
             iLoginResponse.webservice += process.env.HOST_NAME;
         }
         if (process.env.DNS_DOMAINNAME != undefined && process.env.DNS_DOMAINNAME != "") {
+            iLoginResponse.webservice += '.';
             iLoginResponse.webservice += process.env.DNS_DOMAINNAME;
         }
         iLoginResponse.webservice += ":97";
