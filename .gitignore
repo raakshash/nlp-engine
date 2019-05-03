@@ -23,6 +23,4 @@ client/yarn-error.log*
 
 
 variables.env
-docker-local-deploy.sh
-docker-database.sh
 classifier.json
