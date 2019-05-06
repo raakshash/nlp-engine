@@ -16,5 +16,11 @@ client/Dockerfile
 client/.dockerignore
 client/nginx
 
+test
+
 docker-local-deploy.sh
+docker-database.sh
 Jenkins-release-build
+
+variables.env
+classifier.json
