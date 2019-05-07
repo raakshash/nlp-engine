@@ -8,6 +8,7 @@ var http = require('http');
 const passport = require('passport');
 var session = require('express-session');
 const nlp = require('./app/nltk/natural');
+const ML = require('./app/config/machinelearning');
 
 global.NLP = nlp;
   
@@ -151,5 +152,8 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+
+ML.init();
 
 module.exports = app;
