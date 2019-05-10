@@ -1,74 +1,8 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
 var debug = require('debug')('nlp-engine:server');
 var http = require('http');
-const passport = require('passport');
-var session = require('express-session');
-const nlp = require('./app/nltk/natural');
-const ML = require('./app/config/machinelearning');
-
-global.NLP = nlp;
-  
-require("./app/config/database.js").init();
-require('./app/config/passport.js').init(passport);
-
-// var indexRouter = require('./app/routes/index');
-const apiRouter = require('./app/routes/api');
-const authenticateRouter = require('./app/routes/authenticate');
-const webserviceRouter = require('./app/routes/webservice');
-
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'app/views'));
-app.set('view engine', 'hbs');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-
-// required for passport
-app.use(session({
-  secret: 'raakshash', // session secret
-  resave: true,
-  saveUninitialized: true
-}));
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-
-// app.use('/', indexRouter);
-app.use('/api', apiRouter);
-app.use('/authenticate', authenticateRouter);
-app.use('/webservice', webserviceRouter);
-
-if(process.env.NODE_ENV === 'production'){
-  app.use(express.static(path.resolve(__dirname, 'public')));
-  app.get('*', function(req, res){
-    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-  });
-}else{
-  app.use(express.static(path.join(__dirname, 'public')));
-}
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+var app = require('./app/app');
 
 /**
  * Get port from environment and store in Express.
@@ -81,21 +15,96 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+if (cluster.isMaster) {
+  console.log(`Master ${process.pid} is running`);
+
+  // Fork workers.
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+    cluster.fork();
+  });
+
+  // Keep track of http requests
+  // let numReqs = 0;
+  // setInterval(() => {
+  //   console.log(`numReqs = ${numReqs}`);
+  // }, 1000);
+
+  // // Count requests
+  // function messageHandler(msg) {
+  //   if (msg.cmd && msg.cmd === 'notifyRequest') {
+  //     numReqs += 1;
+  //   }
+  // }
+
+  // for (const id in cluster.workers) {
+  //   cluster.workers[id].on('message', messageHandler);
+  // }
+
+} else {
+
+  var server = http.createServer(app);
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+
+  server.listen(port, function () {
+    console.log("your app is runing on localhost:" + port);
+  });
+  server.on('error', onError);
+  server.on('listening', onListening);
+
+  /**
+   * Event listener for HTTP server "error" event.
+   */
+
+  function onError(error) {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
+
+    var bind = typeof port === 'string'
+      ? 'Pipe ' + port
+      : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        console.error(bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        console.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  }
+
+  /**
+   * Event listener for HTTP server "listening" event.
+   */
+
+  function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+  }
+
+  console.log(`Worker ${process.pid} started`);
+}
 
 /**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port, function(){
-  console.log("your app is runing on localhost:"+port);
-});
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
+   * Normalize a port into a number, string, or false.
+   */
 
 function normalizePort(val) {
   var port = parseInt(val, 10);
@@ -112,48 +121,3 @@ function normalizePort(val) {
 
   return false;
 }
-
-/**
- * Event listener for HTTP server "error" event.
- */
-
-function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
-
-
-ML.init();
-
-module.exports = app;

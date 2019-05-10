@@ -15,9 +15,10 @@ class NLP {
             this.Classifier.save(classifierFileName, function (err, data) {
                 if (err) {
                     console.log("Error: " + err);
-                } else {
-                    console.log("Data saved successfully");
-                }
+                } 
+                // else {
+                //     console.log("Data saved successfully");
+                // }
             });
         }.bind(this));
     }

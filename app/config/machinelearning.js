@@ -16,7 +16,7 @@ exports.init = function(iUser){
                     NLP.addClassifiedData(iExpression, iIntent.key);
                 });
             })
-        } else {
+        } else if(iUser._id != undefined) {
             var intent = new Intent({
                 user: iUser._id,
                 key: "createKitchen",
