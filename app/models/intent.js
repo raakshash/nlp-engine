@@ -15,7 +15,7 @@ var IntentSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    action: {
+    intentAction: {
         type: String,
         required: false
     },

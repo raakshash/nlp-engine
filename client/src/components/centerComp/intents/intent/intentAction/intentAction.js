@@ -13,9 +13,13 @@ class IntentAction extends Component {
         this.setIntentActionValue = this.setIntentActionValue.bind(this);
     }
 
+    // componentWillReceiveProps() {
+    //     this.setState({ intent: this.props.currentIntentSelected, intentAction: this.props.currentIntentSelected.intentAction })
+    // }
     componentWillMount() {
         this.setState({ intent: this.props.currentIntentSelected, intentAction: this.props.currentIntentSelected.intentAction })
     }
+
     submitIntentActionHandler(event) {
         event.preventDefault();
         this.props.onIntentActionUpdated(this.state);
@@ -23,6 +27,10 @@ class IntentAction extends Component {
     setIntentActionValue(event) {
         event.preventDefault();
         this.setState({ intentAction: event.target.value })
+    }
+    resetIntentActionValue=(event)=>{
+        event.preventDefault();
+        this.setState({ intentAction: this.state.intent.intentAction})
     }
     render() {
         return (
@@ -32,6 +40,7 @@ class IntentAction extends Component {
                         <input
                             value={this.state.intentAction}
                             onChange={this.setIntentActionValue}
+                            onBlur={this.resetIntentActionValue}
                             name="intent" className="form-control" type="text" placeholder="Add your Action" required />
                     </div>
                 </form>

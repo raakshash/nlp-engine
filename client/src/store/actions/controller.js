@@ -94,3 +94,16 @@ export const getResponse = function (iDispatch, iState) {
             }));
         });
 }
+
+export const updateIntentAction = function (iDispatch, iState) {
+    fetch('/api/updateaction/' + iState.intent.key, {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(iState)
+    })
+        .then(res => res.json()).then(function (iIntent) {
+            iDispatch(getAction(CONSTANTS.SWITCH_INTENT_SELECTION, iIntent));
+        });
+}

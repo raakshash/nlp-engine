@@ -15,18 +15,18 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+// if (cluster.isMaster) {
+//   console.log(`Master ${process.pid} is running`);
 
-  // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+//   // Fork workers.
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
-    cluster.fork();
-  });
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.log(`worker ${worker.process.pid} died`);
+//     cluster.fork();
+//   });
 
   // Keep track of http requests
   // let numReqs = 0;
@@ -45,7 +45,7 @@ if (cluster.isMaster) {
   //   cluster.workers[id].on('message', messageHandler);
   // }
 
-} else {
+// } else {
 
   var server = http.createServer(app);
 
@@ -100,7 +100,6 @@ if (cluster.isMaster) {
   }
 
   console.log(`Worker ${process.pid} started`);
-}
 
 /**
    * Normalize a port into a number, string, or false.

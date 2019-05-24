@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../../container/centerComp/intents/intent/intent';
 import Expressions from './expression/expression';
 import Response from './response/response';
+import IntentAction from './intentAction/intentAction';
 
 class Intent extends Component {
     render() {
@@ -15,6 +16,7 @@ class Intent extends Component {
                 <hr />
                 <div className="container-fluid wrapper">
                     <Expressions />
+                    <IntentAction />
                     <Response />
                 </div>
             </div>

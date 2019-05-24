@@ -38,7 +38,7 @@ router.post('/addexpression/:_intent', function (req, res, next) {
     }, function (err, iIntent) {
         if (err) {
             console.log("No intent found: " + err);
-        } else if(iIntent) {
+        } else if (iIntent) {
             iIntent.expressions.push(expression);
             if (expression != undefined) {
                 NLP.addClassifiedData(expression, iIntent.key);
@@ -50,7 +50,7 @@ router.post('/addexpression/:_intent', function (req, res, next) {
                     res.json(iIntent);
                 }
             });
-        }else{
+        } else {
             console.log("No intent found: " + err);
         }
     });
@@ -64,7 +64,7 @@ router.post('/addresponse/:_intent', function (req, res, next) {
     }, function (err, iIntent) {
         if (err) {
             console.log("No intent found: " + err);
-        } else if(iIntent) {
+        } else if (iIntent) {
             iIntent.responses.push(newResponse);
             iIntent.save(function (err) {
                 if (err) {
@@ -73,8 +73,28 @@ router.post('/addresponse/:_intent', function (req, res, next) {
                     res.json(iIntent);
                 }
             })
-        }else{
+        } else {
             console.log("No intent found: " + err);
+        }
+    });
+});
+
+router.post('/updateaction/:_intent', function (req, res, next) {
+    let newIntentAction = req.body.intentAction;
+    Intent.findOne({ user: req.user._id, key: req.params._intent }, function (err, iIntent) {
+        if (err) {
+            console.log("No Intent found: " + err);
+        } else if (iIntent != undefined) {
+            iIntent.intentAction = newIntentAction;
+            iIntent.save(function (err) {
+                if (err) {
+                    console.log("Intenet is not saved successfully" + err);
+                } else {
+                    res.json(iIntent);
+                }
+            });
+        } else {
+            console.log("No intent found");
         }
     });
 });
@@ -90,7 +110,7 @@ router.post('/getresponse', function (req, res, next) {
         }, function (err, iIntent) {
             if (err) {
                 console.log("No intent found: " + err);
-            } else if(iIntent) {
+            } else if (iIntent) {
                 if (iIntent.responses.length > 0) {
                     let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
                     resToSend = iIntent.responses[replyRandomIndex];
@@ -99,7 +119,7 @@ router.post('/getresponse', function (req, res, next) {
                     resToSend = "Not trained for this";
                 }
                 res.json(resToSend);
-            }else{
+            } else {
                 res.json(resToSend)
             }
         });
