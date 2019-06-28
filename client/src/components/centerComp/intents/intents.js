@@ -11,7 +11,7 @@ class IntentList extends Component {
         this.submitHandler = this.submitHandler.bind(this);
         this.setValue = this.setValue.bind(this);
     }
-    componentWillMount(){
+    componentWillMount() {
         this.props.onComponentInit();
     }
     submitHandler(event) {
@@ -22,6 +22,11 @@ class IntentList extends Component {
     setValue(event) {
         event.preventDefault();
         this.setState({ intentName: event.target.value })
+    }
+
+    onIntentDeleted = (iIntent, iEvent) => {
+        iEvent.preventDefault();
+        this.props.onIntentDeleted(iIntent);
     }
     render() {
 
@@ -41,11 +46,17 @@ class IntentList extends Component {
                 <div className="container-fluid wrapper">
                     <div className="list-group">
                         {this.props.intents.map(iIntent =>
-                            <button 
-                            key={iIntent.key} 
-                            onClick={this.props.switchIntentSelection.bind(this, iIntent)} 
-                            className="list-group-item list-group-item-action list-group-item-secondary">
-                            {iIntent.value}</button>
+                            <div className="intent-wrapper">
+                                <button
+                                    key={iIntent.key}
+                                    onClick={this.props.switchIntentSelection.bind(this, iIntent)}
+                                    className="list-group-item list-group-item-action list-group-item-secondary">
+                                    {iIntent.value}
+                                </button>
+                                <a className="delete-button" onClick={this.onIntentDeleted.bind(this, iIntent)}>
+                                    <i className="fa fa-trash" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         )}
                     </div>
                 </div>

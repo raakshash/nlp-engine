@@ -33,54 +33,76 @@ export const getUserSignuped = function (iDispatch, iState) {
 
 export const getIntents = function (iDispatch) {
     switchIntentSelectionState(iDispatch, null);
-    fetch('/api/getintents')
+    fetch('/api/getAllIntents')
         .then(res => res.json())
         .then(iIntents => {
             iDispatch(getAction(CONSTANTS.GET_INTENTS, iIntents));
         });
 }
 
+export const getExpressions = function (iDispatch, iIntentID) {
+    fetch('/api/getAllExpressions/' + iIntentID)
+        .then(res => res.json())
+        .then(iExpressions => {
+            iDispatch(getAction(CONSTANTS.GET_EXPRESSIONS, iExpressions));
+        });
+}
+
+export const getResponses = function (iDispatch, iIntentID) {
+    fetch('/api/getAllResponses/' + iIntentID)
+        .then(res => res.json())
+        .then(iResponses => {
+            iDispatch(getAction(CONSTANTS.GET_RESPONSES, iResponses));
+        });
+}
+
 export const addIntent = function (iDispatch, iState) {
-    fetch('/api/addintent', {
+    fetch('/api/addIntent', {
         method: "POST",
         headers: {
             'Content-type': 'application/json'
         },
         body: JSON.stringify(iState)
     })
-        .then(function () {
-            getIntents(iDispatch);
+        .then(res => res.json()).then(function (iStatus) {
+            if (iStatus) {
+                getIntents(iDispatch);
+            }
         });
 }
 
 export const addExpression = function (iDispatch, iState) {
-    fetch('/api/addexpression/' + iState.intent.key, {
+    fetch('/api/addExpression/' + iState.intent._id, {
         method: "POST",
         headers: {
             'Content-type': 'application/json'
         },
         body: JSON.stringify(iState)
     })
-        .then(res => res.json()).then(function (iIntent) {
-            iDispatch(getAction(CONSTANTS.SWITCH_INTENT_SELECTION, iIntent));
+        .then(res => res.json()).then(function (iStatus) {
+            if (iStatus) {
+                getExpressions(iDispatch, iState.intent._id);
+            }
         });
 }
 
 export const addResponse = function (iDispatch, iState) {
-    fetch('/api/addresponse/' + iState.intent.key, {
+    fetch('/api/addResponse/' + iState.intent._id, {
         method: "POST",
         headers: {
             'Content-type': 'application/json'
         },
         body: JSON.stringify(iState)
     })
-        .then(res => res.json()).then(function (iIntent) {
-            iDispatch(getAction(CONSTANTS.SWITCH_INTENT_SELECTION, iIntent));
+        .then(res => res.json()).then(function (iStatus) {
+            if (iStatus) {
+                getResponses(iDispatch, iState.intent._id)
+            }
         });
 }
 
-export const getResponse = function (iDispatch, iState) {
-    fetch('/api/getresponse', {
+export const getResponse = function (iDispatch, iAccessID, iState) {
+    fetch('/webservice/getResponse/'+iAccessID, {
         method: "POST",
         headers: {
             'Content-type': 'application/json'
@@ -96,7 +118,7 @@ export const getResponse = function (iDispatch, iState) {
 }
 
 export const updateIntentAction = function (iDispatch, iState) {
-    fetch('/api/updateaction/' + iState.intent.key, {
+    fetch('/api/updateAction/' + iState.intent._id, {
         method: "POST",
         headers: {
             'Content-type': 'application/json'
@@ -105,5 +127,47 @@ export const updateIntentAction = function (iDispatch, iState) {
     })
         .then(res => res.json()).then(function (iIntent) {
             iDispatch(getAction(CONSTANTS.SWITCH_INTENT_SELECTION, iIntent));
+        });
+}
+
+export const deleteIntent = function(iDispatch, iState){
+    fetch('/api/deleteIntent/' + iState._id, {
+        method: "DELETE",
+        headers: {
+            'Content-type': 'application/json'
+        }
+    })
+        .then(res => res.json()).then(function (iStatus) {
+            if (iStatus) {
+                getIntents(iDispatch);
+            }
+        });
+}
+
+export const deleteExpression = function (iDispatch, iState) {
+    fetch('/api/deleteExpression/' + iState._id, {
+        method: "DELETE",
+        headers: {
+            'Content-type': 'application/json'
+        }
+    })
+        .then(res => res.json()).then(function (iStatus) {
+            if (iStatus) {
+                getExpressions(iDispatch, iState.intentID)
+            }
+        });
+}
+
+export const deleteResponse = function (iDispatch, iState) {
+    fetch('/api/deleteResponse/' + iState._id, {
+        method: "DELETE",
+        headers: {
+            'Content-type': 'application/json'
+        }
+    })
+        .then(res => res.json()).then(function (iStatus) {
+            if (iStatus) {
+                getResponses(iDispatch, iState.intentID)
+            }
         });
 }

@@ -25,6 +25,11 @@ class Response extends Component {
         event.preventDefault();
         this.setState({ response: event.target.value })
     }
+
+    onResponseDelete = (iResponse, iEvent) => {
+        iEvent.preventDefault();
+        this.props.onResponseDeleted(iResponse);
+    }
     render() {
         return (
             <div className="container">
@@ -38,8 +43,13 @@ class Response extends Component {
                 </form>
                 <br />
                 <div className="list-group">
-                    {this.props.currentIntentSelected.responses.map((iResponse, index) =>
-                        <li key={index} className="list-group-item">{iResponse}</li>
+                    {this.props.currentIntentResponses.map((iResponse, index) =>
+                        <li key={index} className="list-group-item">
+                            {iResponse.value}
+                            <a className="delete-button" onClick={this.onResponseDelete.bind(this, iResponse)}>
+                                <i className="fa fa-trash" aria-hidden="true"></i>
+                            </a>
+                        </li>
                     )}
                 </div>
             </div>

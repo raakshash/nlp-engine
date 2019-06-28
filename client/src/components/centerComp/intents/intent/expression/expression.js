@@ -14,6 +14,7 @@ class Expressions extends Component {
     }
 
     componentWillMount() {
+        this.props.onComponentInit(this.props.currentIntentSelected._id);
         this.setState({ intent: this.props.currentIntentSelected, expression: "" })
     }
     submitExpressionHandler(event) {
@@ -25,6 +26,12 @@ class Expressions extends Component {
         event.preventDefault();
         this.setState({ expression: event.target.value })
     }
+
+    onExpressionDelete = (iExpression, iEvent) => {
+        iEvent.preventDefault();
+        this.props.onExpressionDeleted(iExpression);
+    }
+
     render() {
         return (
             <div className="container">
@@ -38,8 +45,13 @@ class Expressions extends Component {
                 </form>
                 <br />
                 <div className="list-group">
-                    {this.props.currentIntentSelected.expressions.map((iExpression, index) =>
-                        <li key={index} className="list-group-item">{iExpression}</li>
+                    {this.props.currentIntentExpressions.map((iExpression, index) =>
+                        <li key={index} className="list-group-item">
+                            {iExpression.value}
+                            <a className="delete-button" onClick={this.onExpressionDelete.bind(this, iExpression)}>
+                                <i className="fa fa-trash" aria-hidden="true"></i>
+                            </a>
+                        </li>
                     )}
                 </div>
             </div>

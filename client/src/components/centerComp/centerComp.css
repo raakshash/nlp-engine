@@ -4,3 +4,18 @@
   position: relative;
   height: 80vh;
 }
+
+.delete-button {
+  float: right;
+}
+
+.intent-wrapper{
+  position: relative;
+}
+
+.intent-wrapper .delete-button {
+  position: absolute;
+  top: 16px;
+  left: 92%;
+  z-index: 1;
+}

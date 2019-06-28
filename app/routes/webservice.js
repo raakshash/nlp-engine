@@ -1,34 +1,34 @@
 const express = require('express');
 const router = express.Router();
-const Intent = require('../models/intent');
+const IntentManager = require('../controllers/intentManager');
+const ResponseManager = require('../controllers/responseManager');
 
-router.post('/getresponse/:_accessID', function(req, res, next){
+router.post('/getResponse/:_accessID', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let data = NLP.getClassifiedData(req.body.expression).classified;
+    let intentID = NLP.getClassifiedData(req.body.expression).classified;
     let resToSend = "Not trained for this";
 
-    if (data != undefined) {
-        Intent.findOne({
-            user: req.params._accessID,
-            key: data
-        }, function (err, iIntent) {
+    if (intentID != undefined) {
+        IntentManager.findIntent(req.params._accessID, intentID, function (err, iIntent) {
             if (err) {
                 console.log("No intent found: " + err);
-            } else if(iIntent) {
-                if (iIntent.responses.length > 0) {
-                    let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
-                    resToSend = iIntent.responses[replyRandomIndex];
-                }
-                if (resToSend == undefined || resToSend == "") {
-                    resToSend = "Not trained for this";
-                }
-                res.json({fulfillment: resToSend});
-            }else{
-                res.json({fulfillment: resToSend});
+            } else if (iIntent != undefined) {
+                ResponseManager.findAllResponses(iIntent._id, function (err, iResponses) {
+                    if (iResponses.length > 0) {
+                        let replyRandomIndex = Math.floor(Math.random() * iResponses.length);
+                        resToSend = iResponses[replyRandomIndex];
+                    }
+                    if (resToSend == undefined || resToSend == "") {
+                        resToSend = "Not trained for this";
+                    }
+                    res.json({ intent: iIntent, fulfillment: resToSend, expression: req.body.expression });
+                });
+            } else {
+                res.json({ intent: null, fulfillment: resToSend, expression: req.body.expression });
             }
         });
     } else {
-        res.json({fulfillment: resToSend});
+        res.json({ intent: null, fulfillment: resToSend, expression: req.body.expression });
     }
 });
 

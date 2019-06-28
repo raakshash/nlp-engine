@@ -1,12 +1,14 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { intentReducer, switchIntentActiveReducer, getMachineResponseReducer, userLoginReducer, switchIntentViewReducer } from './reducers/reducer';
+import {Reducer} from './reducers/reducer';
 
 const allReducers = combineReducers({
-    intents: intentReducer,
-    currentIntentSelected: switchIntentActiveReducer,
-    responseData: getMachineResponseReducer,
-    userLoginData: userLoginReducer,
-    isIntentViewActive: switchIntentViewReducer
+    intents: Reducer.IntentReducer,
+    currentIntentSelected: Reducer.SwitchIntentActiveReducer,
+    currentIntentExpressions: Reducer.ExpressionsReducer,
+    currentIntentResponses: Reducer.ResponsesReducer,
+    responseData: Reducer.GetMachineResponseReducer,
+    userLoginData: Reducer.UserLoginReducer,
+    isIntentViewActive: Reducer.SwitchIntentViewReducer
 });
 
 const logger = store => next => action => {

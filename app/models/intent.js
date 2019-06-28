@@ -18,13 +18,6 @@ var IntentSchema = mongoose.Schema({
     intentAction: {
         type: String,
         required: false
-    },
-    expressions: {
-        type: Array,
-        required: false
-    },
-    responses: {
-        type: Array
     }
 });
 

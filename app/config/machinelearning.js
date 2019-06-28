@@ -1,36 +1,28 @@
 "use strict";
 
-const Intent = require('../models/intent');
+const IntentManager = require('../controllers/intentManager');
+const ExpressionManager = require('../controllers/expressionManager');
 
-exports.init = function(iUser){
-    let userData = {};
-    if(iUser !== undefined){
-        userData.user = iUser._id;
-    }
-    Intent.find(userData, function (err, iIntents) {
-        if (err) {
-            console.log("database giving problem on first intent")
-        } else if (iIntents.length > 0) {
-            iIntents.forEach(function (iIntent) {
-                iIntent.expressions.forEach(function (iExpression) {
-                    NLP.addClassifiedData(iExpression, iIntent.key);
+exports.init = function (iUser) {
+    if (iUser !== undefined && iUser._id != undefined) {
+        IntentManager.findAllIntents(iUser._id, function (err, iIntents) {
+            if (err) {
+                console.log("database giving problem on first intent")
+            } else if (iIntents != undefined) {
+                iIntents.forEach(function (iIntent) {
+                    ExpressionManager.findAllExpressions(iIntent._id, function (err, iExpressions) {
+                        iExpressions.forEach(function (iExpression) {
+                            NLP.addClassifiedData(iExpression.value, iIntent._id);
+                        });
+                    });
+                })
+            } else {
+                IntentManager.addIntent(iUser._id, "Create Kitchen", function (err) {
+                    if (err) {
+                        console.log("Problem in intiating intents", err);
+                    }
                 });
-            })
-        } else if(iUser != undefined && iUser._id != undefined) {
-            var intent = new Intent({
-                user: iUser._id,
-                key: "createKitchen",
-                value: "Create Kitchen",
-                expressions: ["I want to create kitchen"],
-                responses: []
-            });
-            intent.save(function (err) {
-                if (err) {
-                    console.log("Intenet is not saved successfully" + err);
-                } else {
-                    NLP.addClassifiedData(intent.expressions[0], intent.key);
-                }
-            });
-        }
-    });
+            }
+        });
+    }
 }

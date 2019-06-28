@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 var ExpressionSchema = mongoose.Schema({
-    intent: {
+    intentID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Intents",
         required: true

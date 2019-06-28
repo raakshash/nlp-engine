@@ -1,131 +1,116 @@
 const express = require('express');
 const router = express.Router();
-const Intent = require('../models/intent');
 
-router.get('/getintents', function (req, res, next) {
-    Intent.find({
-        user: req.user._id
-    }, function (err, iIntents) {
-        if (err) {
-            console.log('Error: ' + err);
-        } else {
+const IntentManager = require('../controllers/intentManager');
+const ExpressionManager = require('../controllers/expressionManager');
+const ResponseManager = require('../controllers/responseManager');
+
+router.get('/getAllIntents', function (req, res, next) {
+    IntentManager.findAllIntents(req.user._id, function(err, iIntents){
+        if(err){
+            console.log("No intent found: " + err);
+        }else if(iIntents){
             res.json(iIntents);
+        }else{
+            res.json([]);
         }
     })
 });
 
-router.post('/addintent', function (req, res, next) {
-    let newIntent = new Intent();
-    newIntent.user = req.user._id;
-    newIntent.key = newIntent.makeKey(req.body.intentName)
-    newIntent.value = req.body.intentName;
-    newIntent.expressions = [];
-    newIntent.responses = [];
-    newIntent.save(function (err) {
+router.get('/getAllExpressions/:_intentID', function(req, res, next){
+    ExpressionManager.findAllExpressions(req.params._intentID, function(err, iExpressions){
+        if(err){
+            console.log("No expressions found", err);
+        }else{
+            res.json(iExpressions);
+        }
+    });
+});
+
+router.get('/getAllResponses/:_intentID', function(req, res, next){
+    ResponseManager.findAllResponses(req.params._intentID, function(err, iResponses){
+        if(err){
+            console.log("No expressions found", err);
+        }else{
+            res.json(iResponses);
+        }
+    });
+});
+
+router.post('/addIntent', function (req, res, next) {
+    IntentManager.addIntent(req.user._id, req.body.intentName, function (err) {
+        if (err) {
+            console.log("Intent is not saved successfully" + err);
+            res.json(false);
+        } else {
+            res.json(true);
+        }
+    });
+});
+
+router.post('/addExpression/:_intentID', function (req, res, next) {
+    ExpressionManager.addExpreesion(req.params._intentID, req.body.expression, function (err) {
+        if (err) {
+            console.log("expression is not saved successfully" + err);
+            res.json(false);
+        } else {
+            res.json(true);
+        }
+    });
+});
+
+router.post('/addResponse/:_intentID', function (req, res, next) {
+    ResponseManager.addResponse(req.params._intentID, req.body.response, function (err) {
         if (err) {
             console.log("Intenet is not saved successfully" + err);
+            res.json(false);
         } else {
-            res.json(newIntent);
+            res.json(true);
+        }
+    });
+});
+
+router.post('/updateAction/:_intentID', function (req, res, next) {
+    IntentManager.updateAction(req.params._intentID, req.body.intentAction, function (err, iIntent) {
+        if (err) {
+            console.log("Action not updated succesfully", err);
+        } else {
+            res.json(iIntent);
+        }
+    });
+});
+
+router.delete('/deleteResponse/:_responseID', function (req, res, next) {
+    ResponseManager.deleteOneResponse(req.params._responseID, function (err) {
+        if (err) {
+            console.log("Response not deleted successfully", err);
+            res.json({done: false});
+        }else{
+            res.json({done: true});
+        }
+    });
+});
+
+router.delete('/deleteExpression/:_expressionID', function (req, res, next) {
+    ExpressionManager.deleteOneExpression(req.params._expressionID, function (err) {
+        if (err) {
+            console.log("Response not deleted successfully", err);
+            res.json({done: false});
+        }else{
+            res.json({done: true});
+        }
+    });
+});
+
+router.delete('/deleteIntent/:_intentID', function (req, res, next) {
+    IntentManager.deleteIntent(req.params._intentID, function (err) {
+        if (err) {
+            console.log("Intent not deleted successfully", err);
+            res.json({done: false});
+        }else{
+            res.json({done: true});
         }
     })
-});
-
-router.post('/addexpression/:_intent', function (req, res, next) {
-    let expression = req.body.expression;
-    Intent.findOne({
-        user: req.user._id,
-        key: req.params._intent
-    }, function (err, iIntent) {
-        if (err) {
-            console.log("No intent found: " + err);
-        } else if (iIntent) {
-            iIntent.expressions.push(expression);
-            if (expression != undefined) {
-                NLP.addClassifiedData(expression, iIntent.key);
-            }
-            iIntent.save(function (err) {
-                if (err) {
-                    console.log("Intenet is not saved successfully" + err);
-                } else {
-                    res.json(iIntent);
-                }
-            });
-        } else {
-            console.log("No intent found: " + err);
-        }
-    });
-});
-
-router.post('/addresponse/:_intent', function (req, res, next) {
-    var newResponse = req.body.response;
-    Intent.findOne({
-        user: req.user._id,
-        key: req.params._intent
-    }, function (err, iIntent) {
-        if (err) {
-            console.log("No intent found: " + err);
-        } else if (iIntent) {
-            iIntent.responses.push(newResponse);
-            iIntent.save(function (err) {
-                if (err) {
-                    console.log("Intenet is not saved successfully" + err);
-                } else {
-                    res.json(iIntent);
-                }
-            })
-        } else {
-            console.log("No intent found: " + err);
-        }
-    });
-});
-
-router.post('/updateaction/:_intent', function (req, res, next) {
-    let newIntentAction = req.body.intentAction;
-    Intent.findOne({ user: req.user._id, key: req.params._intent }, function (err, iIntent) {
-        if (err) {
-            console.log("No Intent found: " + err);
-        } else if (iIntent != undefined) {
-            iIntent.intentAction = newIntentAction;
-            iIntent.save(function (err) {
-                if (err) {
-                    console.log("Intenet is not saved successfully" + err);
-                } else {
-                    res.json(iIntent);
-                }
-            });
-        } else {
-            console.log("No intent found");
-        }
-    });
-});
-
-router.post('/getresponse', function (req, res, next) {
-    let data = NLP.getClassifiedData(req.body.expression).classified;
-    let resToSend = "Not trained for this";
-
-    if (data != undefined) {
-        Intent.findOne({
-            user: req.user._id,
-            key: data
-        }, function (err, iIntent) {
-            if (err) {
-                console.log("No intent found: " + err);
-            } else if (iIntent) {
-                if (iIntent.responses.length > 0) {
-                    let replyRandomIndex = Math.floor(Math.random() * iIntent.responses.length);
-                    resToSend = iIntent.responses[replyRandomIndex];
-                }
-                if (resToSend == undefined || resToSend == "") {
-                    resToSend = "Not trained for this";
-                }
-                res.json(resToSend);
-            } else {
-                res.json(resToSend)
-            }
-        });
-    } else {
-        res.json(resToSend)
-    }
 });
 
 module.exports = router;

@@ -45,7 +45,7 @@ class RightComp extends Component {
     onTestExpressionSubmit(event) {
         event.preventDefault();
         let self = this;
-        this.props.onTestExpression(self.state);
+        this.props.onTestExpression(self.props.accessID, self.state);
         self.setState({ expression: '' });
     }
     setValue(event) {
@@ -85,7 +85,7 @@ class RightComp extends Component {
                 </div><br />
                 <div className="container">
                     <h3>{this.props.responseData.expression}</h3>
-                    {this.props.responseData.response}
+                    {JSON.stringify(this.props.responseData.response)}
                 </div>
             </div>
 
