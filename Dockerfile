@@ -20,7 +20,7 @@ COPY . /nlp
 
 RUN npm cache clean --force && \
     # npm install && \
-    npm run client-intsall && \
+    npm run client-install && \
     npm run client-build && \
     mkdir /nlp/public && \
     mv /nlp/client/build/* /nlp/public && \
