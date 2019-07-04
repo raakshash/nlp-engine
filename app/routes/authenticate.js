@@ -25,7 +25,7 @@ var createWSServiceURL = function (iUserID, iLoginResponse) {
         }
         iLoginResponse.webservice += ":9999";
     }
-    iLoginResponse.webservice += "/webservice/getresponse/" + iUserID;
+    iLoginResponse.webservice += "/webservice/getResponse/" + iUserID;
 }
 
 
