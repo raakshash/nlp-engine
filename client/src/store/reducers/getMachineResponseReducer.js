@@ -1,15 +1,9 @@
 import CONSTANT from '../actions/constant';
 
-export const GetMachineResponseReducer = function (state = {}, iAction) {
+export const GetMachineResponseReducer = function (state = null, iAction) {
     switch (iAction.type) {
         case CONSTANT.GET_RESPONSE:
-            return {
-                expression: iAction.payload.expression,
-                response: iAction.payload.response
-            }
-        default: return {
-            expression: "",
-            response: ""
-        }
+            return iAction.payload
+        default: return state
     }
 }

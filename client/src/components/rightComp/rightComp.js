@@ -5,6 +5,8 @@ import './rightComp.css';
 import PropTypes from 'prop-types'
 import SpeechRecognition from 'react-speech-recognition'
 
+import InputComp from '../inputComp/inputComp';
+
 
 const propTypes = {
     startListening: PropTypes.func,
@@ -66,6 +68,21 @@ class RightComp extends Component {
         }
     }
     render() {
+        let inputComp = [];
+        if (this.props.responseData !== null) {
+            if (this.props.responseData.expression != undefined) {
+                inputComp.push(<InputComp id="expression" data={this.props.responseData.expression} />);
+            }
+            if (this.props.responseData.intent != undefined) {
+                inputComp.push(<InputComp id="intent" data={this.props.responseData.intent.value} />);
+            }
+            if (this.props.responseData.intent.intentAction != undefined) {
+                inputComp.push(<InputComp id="intent-action" data={this.props.responseData.intent.intentAction} />);
+            }
+            if (this.props.responseData.fulfillment != undefined) {
+                inputComp.push(<InputComp id="bot-response" data={this.props.responseData.fulfillment.value} />);
+            }
+        }
         return (
             <div className="col-3 col-lg-3 col-sm-3 col-xs-3">
                 <div className="row">
@@ -80,12 +97,15 @@ class RightComp extends Component {
                         </form>
                     </div>
                     <div className="col-2 col-lg-2 col-sm-2 col-xs-2">
-                        <button className="listener" onClick={this.toggleListening} ><i className="fas fa-microphone"></i></button>
+                        <a className="listener" onClick={this.toggleListening}>
+                            <i className="fas fa-microphone" aria-hidden="true"></i>
+                        </a>
                     </div>
                 </div><br />
                 <div className="container">
-                    <h3>{this.props.responseData.expression}</h3>
-                    {JSON.stringify(this.props.responseData.response)}
+                    <div className="md-form active-cyan-2 mb-3">
+                        {inputComp}
+                    </div>
                 </div>
             </div>
 

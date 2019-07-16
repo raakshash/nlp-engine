@@ -110,10 +110,7 @@ export const getResponse = function (iDispatch, iAccessID, iState) {
         body: JSON.stringify(iState)
     })
         .then(res => res.json()).then(function (iResponse) {
-            iDispatch(getAction(CONSTANTS.GET_RESPONSE, {
-                expression: iState.expression,
-                response: iResponse
-            }));
+            iDispatch(getAction(CONSTANTS.GET_RESPONSE,iResponse));
         });
 }
 

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 
 exports.init = function () {
-    const dbURL = process.env.DB || "mongodb://localhost:27017/nlpdata";
+    const dbURL = process.env.DB || "mongodb://vdevpril908plp.dsone.3ds.com:27017/nlpdata";
 
     mongoose.connect(dbURL, {
         useNewUrlParser: true
